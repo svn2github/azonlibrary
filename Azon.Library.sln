@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{CBA65034-377D-4F2D-BB6A-7FF4CC371AFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{06ADED2C-604B-4B74-8E5B-512857EDACAA}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs09
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Helpers.Tests\\Helpers.Tests.csproj
+		SccProjectName1 = Helpers.Tests
+		SccLocalPath1 = Helpers.Tests
+		SccProjectUniqueName2 = Helpers\\Helpers.csproj
+		SccProjectName2 = Helpers
+		SccLocalPath2 = Helpers
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBA65034-377D-4F2D-BB6A-7FF4CC371AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBA65034-377D-4F2D-BB6A-7FF4CC371AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBA65034-377D-4F2D-BB6A-7FF4CC371AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBA65034-377D-4F2D-BB6A-7FF4CC371AFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06ADED2C-604B-4B74-8E5B-512857EDACAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06ADED2C-604B-4B74-8E5B-512857EDACAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06ADED2C-604B-4B74-8E5B-512857EDACAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06ADED2C-604B-4B74-8E5B-512857EDACAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

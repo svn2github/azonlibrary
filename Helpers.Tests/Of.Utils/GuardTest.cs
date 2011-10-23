@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Azon.Helpers.Generators;
 using Azon.Helpers.Utils;
 
 using MbUnit.Framework;
@@ -10,21 +9,9 @@ using Moq;
 namespace Azon.Helpers.Tests.Of.Utils {
     [TestFixture]
     public class GuardTest : BaseTestFixture {
-        [Test]
-        public void ShouldNotAllowRecursion() {
-            var key = new object();
-            var mock = this.Mocked<IDisposable>();
-            var action = Fx.Fix(self => () => Guard.Block(
-                key, 
-                () => {
-                    mock.Dispose();
-                    self();
-                }
-            ));
-
-            action();
-
-            Mock.Get(mock).Verify(d => d.Dispose(), Times.Once());
+        public interface IFoo {
+            void Run();
+            void Execute();
         }
 
         [Test]
@@ -62,6 +49,19 @@ namespace Azon.Helpers.Tests.Of.Utils {
             Guard.Block(key, mock.Dispose);
 
             Mock.Get(mock).Verify(d => d.Dispose(), Times.Exactly(2));
+        }
+
+        [Test]
+        public void ShouldBindExecutionToTargetAndMethod() {
+            var mock = this.Mocked<IFoo>(m => {
+                m.Setup(f => f.Run()).Callback(() => Guard.Block(m.Object.Execute));
+                m.Setup(f => f.Execute()).Callback(() => Guard.Block(m.Object.Run));
+            });
+
+            Guard.Block(mock.Run);
+
+            Mock.Get(mock).Verify(d => d.Execute(), Times.Once());
+            Mock.Get(mock).Verify(d => d.Run(), Times.Once());
         }
     }
 }

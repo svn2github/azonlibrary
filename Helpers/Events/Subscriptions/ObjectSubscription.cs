@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 using AshMind.Extensions;
 
+using Azon.Helpers.Asserts;
 using Azon.Helpers.Events.Subscriptions.Clauses;
 using Azon.Helpers.Events.Subscriptions.Infos;
 using Azon.Helpers.Events.Subscriptions.Subscribers;
@@ -29,12 +30,16 @@ namespace Azon.Helpers.Events.Subscriptions {
         }
 
         public ICallMethodClause<T> HasChanged(Expression<Func<T, object>> reference) {
+            Require.NotNull(reference, "reference");
+
             var info = new ChangedSubscriptionInfo(this._entity, Property.Name(reference));
             this._infos.Add(info);
             return new CallMethodClause<T>(this, info);
         }
 
         public ICallMethodClause<T> IsChanging(Expression<Func<T, object>> reference) {
+            Require.NotNull(reference, "reference");
+
             var info = new ChangingSubscriptionInfo(this._entity, Property.Name(reference));
             this._infos.Add(info);
             return new CallMethodClause<T>(this, info);

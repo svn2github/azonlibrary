@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 using Azon.Helpers.Asserts;
 
 namespace Azon.Helpers.Utils {
+    /// <summary>
+    /// Provides methods to work with templates.
+    /// </summary>
     public static class Template {
         private static readonly Regex _regex = new Regex(@"{(\w+)}");
 

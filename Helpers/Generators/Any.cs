@@ -8,6 +8,9 @@ using Azon.Helpers.Generators.ValueGenerators;
 using Azon.Helpers.Generators.ValueGenerators.Constraints;
 
 namespace Azon.Helpers.Generators {
+    /// <summary>
+    /// Contains a set of static methods to generate objects of desired type.
+    /// </summary>
     public static class Any {
         private static readonly KeyValuePair<Type, IValueGenerator> _notFound;
         private static readonly List<KeyValuePair<Type, IValueGenerator>> _generators;
@@ -29,6 +32,11 @@ namespace Azon.Helpers.Generators {
             _generators.Sort((x, y) => x.Key.IsAssignableFrom(y.Key) ? 0 : 1);
         }
 
+        /// <summary>
+        /// Sets public properties of a given object to random values.
+        /// </summary>
+        /// <typeparam name="T">A type of object.</typeparam>
+        /// <param name="instance">An object to generate values for.</param>
         public static void Properties<T>(T instance) {
             var properties = instance.GetType().GetProperties().Where(p => p.CanWrite);
 
@@ -37,10 +45,22 @@ namespace Azon.Helpers.Generators {
             }
         }
 
+        /// <summary>
+        /// Returns a random value of a specified type using registered generators.
+        /// </summary>
+        /// <typeparam name="T">A type of value to generate.</typeparam>
+        /// <param name="constraints">Optional constraints to be applied to a generated value.</param>
+        /// <returns>A value of a specified type.</returns>
         public static T Value<T>(params IConstraint[] constraints) {
             return (T)Any.Value(typeof(T), constraints);
         }
 
+        /// <summary>
+        /// Returns a random value of a specified type using registered generators.
+        /// </summary>
+        /// <param name="type">A type of value to generate.</param>
+        /// <param name="constraints">Optional constraints to be applied to a generated value.</param>
+        /// <returns>An value of a specified type.</returns>
         public static object Value(Type type, params IConstraint[] constraints) {
             var generator = _generators.FirstOrDefault(pair => pair.Key.IsAssignableFrom(type)
                                                             || type.IsGenericTypeDefinedAs(pair.Key));
@@ -50,10 +70,21 @@ namespace Azon.Helpers.Generators {
             return generator.Value.GetRandomValue(type, constraints);
         }
 
+        /// <summary>
+        /// Returns a non-negative integer value.
+        /// </summary>
+        /// <param name="maxValue">A maximal possible value.</param>
+        /// <returns>A non-negative integer value.</returns>
         public static int Integer(int maxValue) {
             return Any.Integer(0, maxValue);
         }
 
+        /// <summary>
+        /// Returns an integer value within a specified range.
+        /// </summary>
+        /// <param name="minValue">A minimal possible value.</param>
+        /// <param name="maxValue">A maximal possible value.</param>
+        /// <returns>An integer value within a specified range.</returns>
         public static int Integer(int minValue, int maxValue) {
             return Any.Value<int>(
                 new MinValueConstraint<int>(minValue),
@@ -61,6 +92,10 @@ namespace Azon.Helpers.Generators {
             );
         }
 
+        /// <summary>
+        /// Returns a random number between 0.0 and 1.0.
+        /// </summary>
+        /// <returns>A random number between 0.0 and 1.0.</returns>
         public static double Double() {
             return Any.Value<double>();
         }

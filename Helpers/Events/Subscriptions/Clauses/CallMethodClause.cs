@@ -1,5 +1,6 @@
 using System;
 
+using Azon.Helpers.Asserts;
 using Azon.Helpers.Events.Subscriptions.Infos;
 using Azon.Helpers.Utils;
 
@@ -14,10 +15,14 @@ namespace Azon.Helpers.Events.Subscriptions.Clauses {
         }
 
         public IObjectSubscription<T> Call(Action action) {
+            Require.NotNull(action, "action");
+
             return this.Call((sender, eventArgs) => action());
         }
 
         public IObjectSubscription<T> Call(Action<T> action) {
+            Require.NotNull(action, "action");
+
             return this.Call((sender, eventArgs) => action(sender));
         }
 

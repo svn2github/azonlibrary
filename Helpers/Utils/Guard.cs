@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Azon.Helpers.Utils {
+    /// <summary>
+    /// A helper class that simplifies <see cref="StackOverflowException"/> prevention.
+    /// </summary>
     public static class Guard {
         private class Protector : IDisposable {
             private int _isOnLookout;

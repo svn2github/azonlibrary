@@ -16,6 +16,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AshMind.Extensions">
+      <HintPath>..\packages\AshMind.Extensions.1.0.4\lib\3.5\AshMind.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,25 +48,47 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Any.cs" />
-    <Compile Include="Extensions\PropertyInfoExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Generators\Any.cs" />
+    <Compile Include="Reflection\AttachedProperty.cs" />
+    <Compile Include="Generators\Fx.cs" />
+    <Compile Include="Reflection\NotifiableProperty.cs" />
+    <Compile Include="Utils\Guard.cs" />
+    <Compile Include="Reflection\HierarchicalPropertyInfo.cs" />
+    <Compile Include="Utils\Weak.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Require.cs" />
-    <Compile Include="Template.cs" />
-    <Compile Include="ValueGenerators\Constraints\IConstraint.cs" />
-    <Compile Include="ValueGenerators\Constraints\MaxValueConstraint.cs" />
-    <Compile Include="ValueGenerators\Constraints\MinValueConstraint.cs" />
-    <Compile Include="ValueGenerators\EnumValueGenerator.cs" />
-    <Compile Include="ValueGenerators\IValueGenerator.cs" />
-    <Compile Include="ValueGenerators\NullableValueGenerator.cs" />
-    <Compile Include="ValueGenerators\NumericValueGenerator.cs" />
-    <Compile Include="ValueGenerators\ObjectValueGenerator.cs" />
-    <Compile Include="ValueGenerators\PrimitiveValueGenerator.cs" />
-    <Compile Include="ValueGenerators\ValueGenerator.cs" />
+    <Compile Include="Reflection\Property.cs" />
+    <Compile Include="Asserts\Require.cs" />
+    <Compile Include="Events\Subscribe.cs" />
+    <Compile Include="Events\Subscriptions\AggregateSubscription.cs" />
+    <Compile Include="Events\Subscriptions\BaseSubscription.cs" />
+    <Compile Include="Events\Subscriptions\Clauses\CallMethodClause.cs" />
+    <Compile Include="Events\Subscriptions\Clauses\ICallMethodClause.cs" />
+    <Compile Include="Events\Subscriptions\Infos\ChangedSubscriptionInfo.cs" />
+    <Compile Include="Events\Subscriptions\Infos\ChangingSubscriptionInfo.cs" />
+    <Compile Include="Events\Subscriptions\Infos\ISubscriptionInfo.cs" />
+    <Compile Include="Events\Subscriptions\Infos\SubscriptionInfo.cs" />
+    <Compile Include="Events\Subscriptions\IObjectSubscription.cs" />
+    <Compile Include="Events\Subscriptions\ISubscription.cs" />
+    <Compile Include="Events\Subscriptions\ObjectSubscription.cs" />
+    <Compile Include="Events\Subscriptions\Subscribers\BaseSubscribeOnChanging.cs" />
+    <Compile Include="Events\Subscriptions\Subscribers\ISubscribeOn.cs" />
+    <Compile Include="Events\Subscriptions\Subscribers\SubscribeOnChanged.cs" />
+    <Compile Include="Events\Subscriptions\Subscribers\SubscribeOnChanging.cs" />
+    <Compile Include="Utils\Template.cs" />
+    <Compile Include="Generators\ValueGenerators\Constraints\IConstraint.cs" />
+    <Compile Include="Generators\ValueGenerators\Constraints\MaxValueConstraint.cs" />
+    <Compile Include="Generators\ValueGenerators\Constraints\MinValueConstraint.cs" />
+    <Compile Include="Generators\ValueGenerators\EnumValueGenerator.cs" />
+    <Compile Include="Generators\ValueGenerators\IValueGenerator.cs" />
+    <Compile Include="Generators\ValueGenerators\NullableValueGenerator.cs" />
+    <Compile Include="Generators\ValueGenerators\NumericValueGenerator.cs" />
+    <Compile Include="Generators\ValueGenerators\ObjectValueGenerator.cs" />
+    <Compile Include="Generators\ValueGenerators\PrimitiveValueGenerator.cs" />
+    <Compile Include="Generators\ValueGenerators\ValueGenerator.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,6 +7,15 @@ namespace Azon.Helpers.Utils {
     public static class Template {
         private static readonly Regex _regex = new Regex(@"{(\w+)}");
 
+        /// <summary>
+        /// Replaces text occurences enclosed in braces with the string representation
+        /// of a corresponding property value of a specified object.
+        /// </summary>
+        /// <param name="template">A composite string format.</param>
+        /// <param name="params">An object that contains zero or more properties to format.</param>
+        /// <returns>A copy of string in which the format items have been replaced by
+        /// the string representation of a corresponding property value of a specified object.</returns>
+        /// <example>Template.Apply("Hello {world}", new { world = "Earth" });</example>
         public static string Apply(string template, object @params) {
             Require.NotNull(template, "template");
             Require.NotNull(@params, "params");

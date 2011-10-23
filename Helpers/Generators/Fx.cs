@@ -13,12 +13,5 @@ namespace Azon.Helpers.Generators {
         public static Action Fix(Func<Action, Action> f) {
             return () => f(Fix(f))();
         }
-
-        public static Action Recursive(Action action) {
-            return Fix(self => () => {
-                action();
-                self();
-            });
-        }
     }
 }

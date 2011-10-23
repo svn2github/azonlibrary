@@ -43,7 +43,8 @@ namespace Azon.Helpers.Tests.Of.Events {
             var called = false;
             var foo = new Foo();
 
-            Subscribe.When.Object(foo)
+            Subscribe.When
+                     .Object(foo)
                      .HasChanged(x => x.Name)
                      .Call(() => called = true);
 
@@ -66,10 +67,11 @@ namespace Azon.Helpers.Tests.Of.Events {
         }
 
         [Test]
-        public void ShouldPassSenderIntoHandlerIfDesired() {
+        public void ShouldPassSenderIntoHandler() {
             var foo = new Foo();
 
-            Subscribe.When.Object(foo)
+            Subscribe.When
+                     .Object(foo)
                      .HasChanged(x => x.Name)
                      .Call(sender => Assert.AreSame(foo, sender));
 
@@ -77,10 +79,11 @@ namespace Azon.Helpers.Tests.Of.Events {
         }
 
         [Test]
-        public void ShouldPassEventArgsIntoHandlerIfDesired() {
+        public void ShouldPassEventArgsIntoHandler() {
             var foo = new Foo();
 
-            Subscribe.When.Object(foo)
+            Subscribe.When
+                     .Object(foo)
                      .HasChanged(x => x.Name)
                      .Call((sender, args) => Assert.IsNotNull(args));
 

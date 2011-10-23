@@ -59,5 +59,19 @@ namespace Azon.Helpers.Tests.Of.Utils {
 
             Assert.AreEqual("50", result);
         }
+
+        [Test]
+        public void ApplyShouldNotTryToReplaceTextWithWhitespaces() {
+            var result = Template.Apply("{not parameter}", new object());
+
+            Assert.AreEqual("{not parameter}", result);
+        }
+
+        [Test]
+        public void ApplyShouldUnderstandEscapedBraces() {
+            var result = Template.Apply("{{parameter}}", new object());
+
+            Assert.AreEqual("{parameter}", result);
+        }
     }
 }

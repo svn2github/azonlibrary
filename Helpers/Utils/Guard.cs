@@ -26,7 +26,7 @@ namespace Azon.Helpers.Utils {
         /// Prevents recursive reentrancy into a block of code.
         /// </summary>
         /// <remarks>
-        /// Does not work with closures.
+        /// Does not work with closures. Use method overload with an explicit key.
         /// </remarks>
         /// <param name="action">A block of code to guard.</param>
         public static void Block(Action action) {
@@ -34,7 +34,7 @@ namespace Azon.Helpers.Utils {
         }
 
         /// <summary>
-        /// Executes a block of code on the sole condition, that there is no<para />
+        /// Executes a block of code on the sole condition, that there is no
         /// another block of code running with the same key down in the stack.
         /// </summary>
         /// <param name="key">A key object to identify a block of code.</param>

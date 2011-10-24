@@ -25,6 +25,14 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
+        public void NotNullShouldRaiseArgumentNullWithParameterNameSet() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotNull(null, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
+            );
+        }
+
+        [Test]
         public void NotNullShouldRaiseExceptionWithCertainMessage() {
             ExceptionAssert.Throws(
                 () => Require.NotNull<Exception>(null, "certain message"),
@@ -68,9 +76,25 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
-        public void NotEmptyShouldRaiseArgumentExceptionByDefaultIfStringIsEmpty() {
-            ExceptionAssert.Throws<ArgumentException>(
+        public void NotEmptyShouldRaiseArgumentNullExceptionWithParameterNameSet() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotEmpty(null, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentOutOfRangeExceptionByDefaultIfStringIsEmpty() {
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
                 () => Require.NotEmpty(string.Empty, string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentOutOfRangeExceptionWithParameterNameSet() {
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+                () => Require.NotEmpty(string.Empty, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
             );
         }
 
@@ -122,9 +146,9 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
-        public void ThatShouldRaiseEceptionWithCertainMessage() {
+        public void ThatShouldRaiseExceptionWithCertainMessage() {
             ExceptionAssert.Throws(
-                () => Require.That(false, "certain message"),
+                () => Require.That<Exception>(false, "certain message"),
                 "certain message"
             );
         }
@@ -132,7 +156,7 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         [Test]
         public void ThatShouldFormatMessageUsingGivenParameters() {
             ExceptionAssert.Throws(
-                () => Require.That(false, "{0} {1}", 1, "pinguin"),
+                () => Require.That<Exception>(false, "{0} {1}", 1, "pinguin"),
                 "1 pinguin"
             );
         }

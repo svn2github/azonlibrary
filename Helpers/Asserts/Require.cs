@@ -30,13 +30,13 @@ namespace Azon.Helpers.Asserts {
 
         /// <summary>
         /// Throws <see cref="ArgumentNullException"/> if tested string is null.<para />
-        /// Throws <see cref="ArithmeticException"/> if tested string is empty.
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if tested string is empty.
         /// </summary>
         /// <param name="value">A string to test.</param>
         /// <param name="parameterName">A name of parameter for the exception to throw.</param>
         public static void NotEmpty(string value, string parameterName) {
             Require.NotNull(value, parameterName);
-            Require.NotEmpty<ArgumentException>(value, parameterName);
+            Require.NotEmpty<ArgumentOutOfRangeException>(value, parameterName);
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace Azon.Helpers.Asserts {
         /// Throws <see cref="ArgumentException"/> if tested condition fails.
         /// </summary>
         /// <param name="condition">A condition to test.</param>
-        /// <param name="message">A message for the exception to throw.</param>
+        /// <param name="message">A message for exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
         public static void That(bool condition, string message, params object[] args) {
-            Require.That<ArgumentException>(condition, message, args);
+            Require.That<ArgumentException>(condition, message);
         }
 
         /// <summary>

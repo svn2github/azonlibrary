@@ -63,6 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+   <Compile Include="..\Helpers\Properties\AssemblyCommon.cs">
+      <Link>Properties\AssemblyCommon.cs</Link>
+    </Compile>
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="Of.Events\SubscribeTests.cs" />
     <Compile Include="Of.Reflection\NotifiablePropertyTests.cs" />

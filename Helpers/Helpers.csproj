@@ -50,6 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constructs\SwitchType\ISwitchType.cs" />
+    <Compile Include="Constructs\SwitchType\ISwitchTypeWithResult.cs" />
+    <Compile Include="Constructs\Switch.cs" />
+    <Compile Include="Constructs\SwitchType\SwitchType.cs" />
+    <Compile Include="Constructs\SwitchType\SwitchTypeBase.cs" />
+    <Compile Include="Constructs\SwitchType\SwitchTypeWithResult.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Generators\Any.cs" />
     <Compile Include="Reflection\AttachedProperty.cs" />
     <Compile Include="Generators\Fx.cs" />
@@ -93,6 +100,7 @@
     <None Include="packages.config" />
     <None Include="Helpers.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

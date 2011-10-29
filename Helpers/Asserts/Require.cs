@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
+
+using Azon.Helpers.Constructs;
 
 namespace Azon.Helpers.Asserts {
     /// <summary>
@@ -25,18 +29,18 @@ namespace Azon.Helpers.Asserts {
             where T : Exception
         {
             if (value == null)
-                throw BuildException<T>(message, args);
+                Require.Exception<T>(message, args);
         }
 
         /// <summary>
         /// Throws <see cref="ArgumentNullException"/> if tested string is null.<para />
-        /// Throws <see cref="ArgumentOutOfRangeException"/> if tested string is empty.
+        /// Throws <see cref="ArgumentException"/> if tested string is empty.
         /// </summary>
         /// <param name="value">A string to test.</param>
         /// <param name="parameterName">A name of parameter for the exception to throw.</param>
         public static void NotEmpty(string value, string parameterName) {
             Require.NotNull(value, parameterName);
-            Require.NotEmpty<ArgumentOutOfRangeException>(value, parameterName);
+            Require.NotEmpty<ArgumentException>(value, "String should not be empty.", parameterName);
         }
 
         /// <summary>
@@ -52,7 +56,26 @@ namespace Azon.Helpers.Asserts {
             Require.NotNull<T>(value, message, args);
 
             if (string.IsNullOrEmpty(value))
-                throw BuildException<T>(message, args);
+                Require.Exception<T>(message, args);
+        }
+
+        public static void NotEmpty(IEnumerable items, string parameterName) {
+            Require.NotNull(items, parameterName);
+            Require.NotEmpty<ArgumentException>(items, "Sequence should contain elements.", parameterName);
+        }
+
+        public static void NotEmpty<T>(IEnumerable items, string message, params object[] args) 
+            where T : Exception 
+        {
+            Require.NotNull<T>(items, message, args);
+
+            var hasItems = 
+                Switch.Type<IEnumerable, bool>(items)
+                    .When<ICollection>(collection => collection.Count > 0)
+                    .Otherwise(enumerable => enumerable.Cast<object>().Any());
+
+            if (!hasItems)
+                Require.Exception<T>(message, args);
         }
 
         /// <summary>
@@ -62,7 +85,7 @@ namespace Azon.Helpers.Asserts {
         /// <param name="message">A message for exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
         public static void That(bool condition, string message, params object[] args) {
-            Require.That<ArgumentException>(condition, message);
+            Require.That<ArgumentException>(condition, message, args);
         }
 
         /// <summary>
@@ -76,15 +99,32 @@ namespace Azon.Helpers.Asserts {
             where T : Exception
         {
             if (!condition)
-                throw BuildException<T>(message, args);
+                Require.Exception<T>(message, args);
         }
 
-        private static T BuildException<T>(string message, params object[] args) {
+        public static T Exception<T>(string message, params object[] args)
+            where T : Exception
+        {
+            throw Switch.Type<T, Exception>(exactType: true)
+                        .When<ArgumentException>(() => BuildArgumentException(message, args))
+                        .Otherwise(() => BuildExceptionFallback<T>(message, args));
+        }
+
+        private static ArgumentException BuildArgumentException(string message, params object[] args) {
+            var formattedMessage = string.Format(message, args);
+            var parameterName = args.Length == 0 ? null : (string)args[0];
+
+            return new ArgumentException(formattedMessage, parameterName);
+        }
+
+        private static T BuildExceptionFallback<T>(string message, params object[] args)
+            where T : Exception
+        {
             var formattedMessage = string.Format(message, args);
             var constructor = typeof(T).GetConstructor(new[] { typeof(string) });
 
             Require.NotNull<InvalidOperationException>(
-                constructor, 
+                constructor,
                 "{0} doesn't have a public constructor matching ctor(string message).",
                 typeof(T)
             );

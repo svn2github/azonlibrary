@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Tests.Internal.Asserts;
+
+using Gallio.Framework.Data;
 
 using MbUnit.Framework;
 
@@ -12,28 +16,13 @@ namespace Azon.Helpers.Tests.Of.Asserts {
 
         [Test]
         public void NotNullShouldRaiseGivenExceptionIfObjectIsNull() {
-            ExceptionAssert.Throws<ArgumentException>(
-                () => Require.NotNull<ArgumentException>(null, string.Empty)
+            ExceptionAssert.Throws<InvalidOperationException>(
+                () => Require.NotNull<InvalidOperationException>(null, string.Empty)
             );
         }
 
         [Test]
-        public void NotNullShouldRaiseArgumentNullExceptionByDefault() {
-            ExceptionAssert.Throws<ArgumentNullException>(
-                () => Require.NotNull(null, string.Empty)
-            );
-        }
-
-        [Test]
-        public void NotNullShouldRaiseArgumentNullWithParameterNameSet() {
-            ExceptionAssert.Throws<ArgumentNullException>(
-                () => Require.NotNull(null, "param"),
-                ex => Assert.AreEqual("param", ex.ParamName)
-            );
-        }
-
-        [Test]
-        public void NotNullShouldRaiseExceptionWithCertainMessage() {
+        public void NotNullShouldRaiseGivenExceptionWithCertainMessageIfObjectIsNull() {
             ExceptionAssert.Throws(
                 () => Require.NotNull<Exception>(null, "certain message"),
                 "certain message"
@@ -41,7 +30,7 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
-        public void NotNullShouldFormatMessageUsingGivenParameters() {
+        public void NotNullShouldFormatMessageUsingGivenParametersIfObjectIsNull() {
             ExceptionAssert.Throws(
                 () => Require.NotNull<Exception>(null, "{0} {1}", 1, "pinguin"),
                 "1 pinguin"
@@ -51,13 +40,32 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         [Test]
         public void NotNullShouldNotThrowIfObjectIsNotNull() {
             ExceptionAssert.DoesNotThrow(
-                () => Require.NotNull(new object(), string.Empty)
+                () => Require.NotNull<Exception>(new object(), string.Empty)
+            );
+        }
+
+        #region Default
+
+        [Test]
+        public void NotNullShouldRaiseArgumentNullExceptionByDefaultIsObjectIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotNull(null, string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotNullShouldRaiseArgumentNullExceptionWithParameterNameSetIfObjectIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotNull(null, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
             );
         }
 
         #endregion
 
-        #region NotEmpty
+        #endregion
+
+        #region NotEmpty String
 
         [Test]
         [Row(null)]
@@ -69,39 +77,9 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
-        public void NotEmptyShouldRaiseArgumentNullExceptionByDefaultIfStringIsNull() {
-            ExceptionAssert.Throws<ArgumentNullException>(
-                () => Require.NotEmpty(null, string.Empty)
-            );
-        }
-
-        [Test]
-        public void NotEmptyShouldRaiseArgumentNullExceptionWithParameterNameSet() {
-            ExceptionAssert.Throws<ArgumentNullException>(
-                () => Require.NotEmpty(null, "param"),
-                ex => Assert.AreEqual("param", ex.ParamName)
-            );
-        }
-
-        [Test]
-        public void NotEmptyShouldRaiseArgumentOutOfRangeExceptionByDefaultIfStringIsEmpty() {
-            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
-                () => Require.NotEmpty(string.Empty, string.Empty)
-            );
-        }
-
-        [Test]
-        public void NotEmptyShouldRaiseArgumentOutOfRangeExceptionWithParameterNameSet() {
-            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
-                () => Require.NotEmpty(string.Empty, "param"),
-                ex => Assert.AreEqual("param", ex.ParamName)
-            );
-        }
-
-        [Test]
         [Row(null)]
         [Row("")]
-        public void NotEmptyShouldRaiseEceptionWithCertainMessage(string value) {
+        public void NotEmptyShouldRaiseGivenExceptionWithCertainMessageIsStringIsNullOrEmpty(string value) {
             ExceptionAssert.Throws(
                 () => Require.NotEmpty<Exception>(value, "certain message"),
                 "certain message"
@@ -111,7 +89,7 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         [Test]
         [Row(null)]
         [Row("")]
-        public void NotEmptyShouldFormatMessageUsingGivenParameters(string value) {
+        public void NotEmptyShouldFormatMessageUsingGivenParametersIsStringIsNullOrEmpty(string value) {
             ExceptionAssert.Throws(
                 () => Require.NotEmpty<Exception>(value, "{0} {1}", 1, "pinguin"),
                 "1 pinguin"
@@ -121,9 +99,51 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         [Test]
         public void NotEmptyShouldNotRaiseExceptionIfStringIsNotNullOrEmpty() {
             ExceptionAssert.DoesNotThrow(
-                () => Require.NotEmpty("valid string", string.Empty)
+                () => Require.NotEmpty<Exception>("valid string", string.Empty)
             );
         }
+
+        #region Default
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentNullExceptionByDefaultIfStringIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotEmpty(null, string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentNullExceptionWithParameterNameSetIfStringIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotEmpty(null, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionByDefaultIfStringIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(string.Empty, string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionWithParameterNameSetIfStringIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(string.Empty, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionWithCertainMessageIfStringIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(string.Empty, "param"),
+                "String should not be empty.\r\nParameter name: param"
+            );
+        }
+
+        #endregion
 
         #endregion
 
@@ -139,14 +159,7 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
-        public void ThatShouldRaiseArgumentExceptionByDefault() {
-            ExceptionAssert.Throws<ArgumentException>(
-                () => Require.That(false, string.Empty)
-            );
-        }
-
-        [Test]
-        public void ThatShouldRaiseExceptionWithCertainMessage() {
+        public void ThatShouldRaiseExceptionWithCertainMessageIfConditionIsFalse() {
             ExceptionAssert.Throws(
                 () => Require.That<Exception>(false, "certain message"),
                 "certain message"
@@ -154,7 +167,7 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
-        public void ThatShouldFormatMessageUsingGivenParameters() {
+        public void ThatShouldFormatMessageUsingGivenParametersIfConditionIsFalse() {
             ExceptionAssert.Throws(
                 () => Require.That<Exception>(false, "{0} {1}", 1, "pinguin"),
                 "1 pinguin"
@@ -162,9 +175,138 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         }
 
         [Test]
-        public void ThatShouldNotRaiseExceptionIfStringIsNotNullOrEmpty() {
+        public void ThatShouldNotRaiseExceptionIfStringIsNotNullOrEmptyIfConditionIsFalse() {
             ExceptionAssert.DoesNotThrow(
                 () => Require.That(true, string.Empty)
+            );
+        }
+
+        #region Default
+
+        [Test]
+        public void ThatShouldRaiseArgumentExceptionByDefaultIfConditionIsFalse() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.That(false, string.Empty)
+            );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region NotEmpty Collection
+
+        private IEnumerable<IEnumerable> InvalidCollectionValues() {
+            yield return null;
+            yield return new int[0];
+        }
+
+        [Test]
+        [Factory("InvalidCollectionValues", Kind = FactoryKind.Object)]
+        public void NotEmptyShouldRaiseGivenExceptionIfCollectionIsInvalid(IEnumerable items) {
+            ExceptionAssert.Throws<InvalidOperationException>(
+                () => Require.NotEmpty<InvalidOperationException>(items, string.Empty)
+            );
+        }
+
+        [Test]
+        [Factory("InvalidCollectionValues", Kind = FactoryKind.Object)]
+        public void NotEmptyShouldRaiseGivenExceptionWithCertainMessageIfCollectionIsInvalid(IEnumerable items) {
+            ExceptionAssert.Throws(
+                () => Require.NotEmpty<Exception>(items, "certain message"),
+                "certain message"
+            );
+        }
+
+        [Test]
+        [Factory("InvalidCollectionValues", Kind = FactoryKind.Object)]
+        public void NotEmptyShouldFormatMessageUsingGivenParametersIfCollectionIsInvalid(IEnumerable items) {
+            ExceptionAssert.Throws(
+                () => Require.NotEmpty<Exception>(items, "{0} {1}", 1, "pinguin"),
+                "1 pinguin"
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldNotRaiseExceptionIfCollectionHasElements() {
+            ExceptionAssert.DoesNotThrow(
+                () => Require.NotEmpty(new[] { 1 }, string.Empty)
+            );
+        }
+
+        #region Default
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentNullExceptionByDefaultIfCollectionIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotEmpty((IEnumerable)null, string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentNullExceptionWithParameterNameSetIfCollectionIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotEmpty((IEnumerable)null, "array"),
+                ex => Assert.AreEqual("array", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionByDefaultIfCollectionIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(new object[0], string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionWithParameterNameSetIfCollectionIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(new object[0], "array"),
+                ex => Assert.AreEqual("array", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionWithCertainMessageIfCollectionIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(new object[0], "array"),
+                "Sequence should contain elements.\r\nParameter name: array"
+            );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Exception
+
+        [Test]
+        public void ExceptionShouldThrowException() {
+            ExceptionAssert.Throws(
+                () => Require.Exception<InvalidOperationException>(string.Empty)
+            );
+        }
+
+        [Test]
+        public void ExceptionShouldThrowExceptionOfGivenType() {
+            ExceptionAssert.Throws<InvalidOperationException>(
+                () => Require.Exception<InvalidOperationException>(string.Empty)
+            );
+        }
+
+        [Test]
+        public void ExceptionShouldThrowExceptionWithCertainMessage() {
+            ExceptionAssert.Throws(
+                () => Require.Exception<InvalidOperationException>("certain message"),
+                "certain message"
+            );
+        }
+
+        [Test]
+        public void ExceptionShouldFormatMessageUsingGivenParameters() {
+            ExceptionAssert.Throws(
+                () => Require.Exception<InvalidOperationException>("{0} {1}", 1, "pinguin"),
+                "1 pinguin"
             );
         }
 

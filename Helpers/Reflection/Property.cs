@@ -37,19 +37,19 @@ namespace Azon.Helpers.Reflection {
             return new HierarchicalPropertyInfo(properties.ToArray());
         }
 
-        public static string Name<T, TResult>(Expression<Func<T, TResult>> reference) {
-            return Name(Hierarchy(reference));
+        public static string Path<T, TResult>(Expression<Func<T, TResult>> reference) {
+            return Path(Hierarchy(reference));
         }
         
-        public static string Name<T>(Expression<Func<T, object>> reference) {
-            return Name(Hierarchy(reference));
+        public static string Path<T>(Expression<Func<T, object>> reference) {
+            return Path(Hierarchy(reference));
         }
 
-        public static string Name<T>(Expression<Func<T>> reference) {
-            return Name(Hierarchy(reference));
+        public static string Path<T>(Expression<Func<T>> reference) {
+            return Path(Hierarchy(reference));
         }
 
-        private static string Name(HierarchicalPropertyInfo propertyInfo) {
+        private static string Path(HierarchicalPropertyInfo propertyInfo) {
             return string.Join(".", propertyInfo.Hierarchy.Select(p => p.Name));
         }
 

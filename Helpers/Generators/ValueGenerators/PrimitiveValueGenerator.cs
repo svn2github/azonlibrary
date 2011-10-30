@@ -5,10 +5,10 @@ using System.IO;
 using Azon.Helpers.Generators.ValueGenerators.Constraints;
 
 namespace Azon.Helpers.Generators.ValueGenerators {
-    public class PrimitiveValueGenerator : IValueGenerator {
+    public class PrimitiveValueGenerator : ValueGenerator {
         private static readonly Random _random = new Random();
 
-        public object GetRandomValue(Type type, IConstraint[] constraints) {
+        protected override object GetRandomValueCore(Type type, IConstraint[] constraints) {
             if (type == typeof(char))
                 return (char)_random.Next(Char.MinValue, Char.MaxValue);
 
@@ -17,17 +17,16 @@ namespace Azon.Helpers.Generators.ValueGenerators {
 
             if (type == typeof(string))
                 return Path.GetRandomFileName();
-            
+
             if (type == typeof(Guid))
                 return Guid.NewGuid();
-
 
             throw new InvalidOperationException(
                 string.Format("{0} does not support generation of {1}", this.GetType(), type
             ));
         }
 
-        public IEnumerable<Type> ForTypes {
+        public override IEnumerable<Type> ForTypes {
             get {
                 yield return typeof(char);
                 yield return typeof(bool);

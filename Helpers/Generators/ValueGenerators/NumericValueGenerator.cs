@@ -5,10 +5,10 @@ using System.Linq;
 using Azon.Helpers.Generators.ValueGenerators.Constraints;
 
 namespace Azon.Helpers.Generators.ValueGenerators {
-    public class NumericValueGenerator : IValueGenerator {
+    public class NumericValueGenerator : ValueGenerator {
         private static readonly Random _random = new Random();
 
-        public object GetRandomValue(Type type, IConstraint[] constraints) {
+        protected override object GetRandomValueCore(Type type, IConstraint[] constraints) {
             var randomNumber = _random.Next(Int32.MinValue, Int32.MaxValue);
             var valueScaled = (double)((long)randomNumber - Int32.MinValue) / ((long)Int32.MaxValue - Int32.MinValue);
 
@@ -60,24 +60,17 @@ namespace Azon.Helpers.Generators.ValueGenerators {
             //        (minValue, maxValue) => minValue + valueScaled * (maxValue - minValue)
             //    );
 
-
-            if (type == typeof(float))
-                return (float)_random.NextDouble();
-
-            if (type == typeof(double))
-                return _random.NextDouble();
-
-            if (type == typeof(decimal))
-                return (decimal)_random.NextDouble();
-
-
-
             throw new InvalidOperationException(
                 string.Format("{0} does not support generation of {1}", this.GetType(), type
             ));
         }
 
-        private T ApplyConstraints<T>(IConstraint[] constraints, T minValue, T maxValue, Func<T, T, object> calculate)
+        private T ApplyConstraints<T>(
+            IConstraint[] constraints, 
+            T minValue, 
+            T maxValue, 
+            Func<T, T, object> calculate
+        )
             where T : struct 
         {
             var minValueConstraint = constraints.OfType<MinValueConstraint<T>>().SingleOrDefault();
@@ -92,7 +85,7 @@ namespace Azon.Helpers.Generators.ValueGenerators {
             return (T)Convert.ChangeType(calculate(minValue, maxValue), typeof(T));
         }
 
-        public IEnumerable<Type> ForTypes {
+        public override IEnumerable<Type> ForTypes {
             get {
                 yield return typeof(sbyte);
                 yield return typeof(short);
@@ -102,10 +95,6 @@ namespace Azon.Helpers.Generators.ValueGenerators {
                 yield return typeof(ushort);
                 yield return typeof(uint);
                 //yield return typeof(ulong);
-
-                yield return typeof(float);
-                yield return typeof(double);
-                yield return typeof(decimal);
             }
         }
     }

@@ -10,31 +10,11 @@ using MbUnit.Framework;
 namespace Azon.Helpers.Tests.Of.Generators.Of.ValueGenerators {
     [TestFixture]
     public class EnumValueGeneratorTests : ValueGeneratorTest<EnumValueGenerator> {
+        protected override Type[] SupportedTypes {
+            get { return new[] { typeof(Enum) }; }
+        }
+
         public enum Foo {}
-
-        [Test]
-        public void ShouldReturnEnumAsSupportedType() {
-            Assert.AreElementsSame(
-                new[] { typeof(Enum) },
-                this.Generator.ForTypes
-            );
-        }
-
-        [Test]
-        public void ShouldThrowIfGivenTypeIsNull() {
-            ExceptionAssert.Throws<ArgumentNullException>(
-                () => this.Generator.GetRandomValue(null, new IConstraint[0]),
-                ex => Assert.AreEqual("enumType", ex.ParamName)
-            );
-        }
-
-        [Test]
-        public void ShouldThrowIfGivenTypeIsNotInheritedForEnum() {
-            ExceptionAssert.Throws<ArgumentException>(
-                () => this.Generator.GetRandomValue(typeof(int), new IConstraint[0]),
-                "Type provided must be an Enum.\r\nParameter name: enumType"
-            );
-        }
 
         [Test]
         public void ShouldThrowIfGivenEnumIsEmpty() {

@@ -45,14 +45,14 @@ namespace Azon.Helpers.Reflection {
         public static TResult Get<T, TResult>(T target, Expression<Func<T, TResult>> reference)
             where T : class, INotifyPropertyChanged
         {
-            var propertyName = Property.Name(reference);
+            var propertyName = Property.Path(reference);
             return AttachedProperty.Get<TResult>(target, propertyName);
         }
 
         public static void Set<T, TValue>(T target, Expression<Func<T, TValue>> reference, TValue value)
             where T : class, INotifyPropertyChanged
         {
-            var propertyName = Property.Name(reference);
+            var propertyName = Property.Path(reference);
             var changedOverlap = new ChangedEventOverlap { Target = target };
             var changingOverlap = new ChangingEventOverlap { Target = target as INotifyPropertyChanging };
 

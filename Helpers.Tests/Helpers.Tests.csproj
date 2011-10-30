@@ -63,14 +63,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-   <Compile Include="..\Helpers\Properties\AssemblyCommon.cs">
+    <Compile Include="..\Helpers\Properties\AssemblyCommon.cs">
       <Link>Properties\AssemblyCommon.cs</Link>
     </Compile>
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="Of.Constructs\Of.SwitchType\SwitchTypeWithResultTests.cs" />
     <Compile Include="Of.Constructs\Of.SwitchType\SwitchTypeTests.cs" />
     <Compile Include="Of.Events\SubscribeTests.cs" />
+    <Compile Include="Of.Generators\Of.ValueGenerators\NumericValueGeneratorTests.cs" />
+    <Compile Include="Of.Generators\Of.ValueGenerators\ObjectValueGeneratorTests.cs" />
+    <Compile Include="Of.Generators\Of.ValueGenerators\NullableValueGeneratorTests.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\EnumValueGeneratorTests.cs" />
+    <Compile Include="Of.Generators\Of.ValueGenerators\ValueGeneratorContract.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\ValueGeneratorTest.cs" />
     <Compile Include="Of.Reflection\NotifiablePropertyTests.cs" />
     <Compile Include="Of.Utils\GuardTest.cs" />

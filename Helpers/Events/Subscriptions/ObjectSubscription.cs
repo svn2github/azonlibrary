@@ -32,7 +32,7 @@ namespace Azon.Helpers.Events.Subscriptions {
         public ICallMethodClause<T> HasChanged(Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
 
-            var info = new ChangedSubscriptionInfo(this._entity, Property.Name(reference));
+            var info = new ChangedSubscriptionInfo(this._entity, Property.Path(reference));
             this._infos.Add(info);
             return new CallMethodClause<T>(this, info);
         }
@@ -40,7 +40,7 @@ namespace Azon.Helpers.Events.Subscriptions {
         public ICallMethodClause<T> IsChanging(Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
 
-            var info = new ChangingSubscriptionInfo(this._entity, Property.Name(reference));
+            var info = new ChangingSubscriptionInfo(this._entity, Property.Path(reference));
             this._infos.Add(info);
             return new CallMethodClause<T>(this, info);
         }

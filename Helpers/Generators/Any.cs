@@ -22,6 +22,7 @@ namespace Azon.Helpers.Generators {
                 from generator in new List<IValueGenerator> { 
                     new PrimitiveValueGenerator(), 
                     new NumericValueGenerator(),
+                    new FractionalValueGenerator(),
                     new EnumValueGenerator(),
                     new NullableValueGenerator(),
                     new ObjectValueGenerator()
@@ -75,14 +76,55 @@ namespace Azon.Helpers.Generators {
             return generator.Value.GetRandomValue(type, constraints);
         }
 
+        #region Shortcuts
+
+        public static sbyte SByte() {
+            return Any.Value<sbyte>();
+        }
+
+        public static sbyte SByte(sbyte maxValue) {
+            return Any.Value<sbyte>(
+                new MaxValueConstraint<sbyte>(maxValue)
+            );
+        }
+
+        public static sbyte SByte(sbyte minValue, sbyte maxValue) {
+            return Any.Value<sbyte>(
+                new MinValueConstraint<sbyte>(minValue),
+                new MaxValueConstraint<sbyte>(maxValue)
+            );
+        }
+
+        public static short Short() {
+            return Any.Value<sbyte>();
+        }
+
+        public static short Short(short maxValue) {
+            return Any.Value<short>(
+                new MaxValueConstraint<short>(maxValue)
+            );
+        }
+
+        public static short Short(short minValue, short maxValue) {
+            return Any.Value<short>(
+                new MinValueConstraint<short>(minValue),
+                new MaxValueConstraint<short>(maxValue)
+            );
+        }
+
+        public static int Integer() {
+            return Any.Value<int>();
+        }
+
         /// <summary>
         /// Returns a random non-negative integer value.
         /// </summary>
         /// <param name="maxValue">A maximal possible value.</param>
         /// <returns>A non-negative integer value.</returns>
         public static int Integer(int maxValue) {
-            Require.That(maxValue >= 0, "maxValue must be greater than or equal to zero.");
-            return Any.Integer(0, maxValue);
+            return Any.Value<int>(
+                new MaxValueConstraint<int>(maxValue)
+            );
         }
 
         /// <summary>
@@ -92,20 +134,160 @@ namespace Azon.Helpers.Generators {
         /// <param name="maxValue">A maximal possible value.</param>
         /// <returns>An integer value within a specified range.</returns>
         public static int Integer(int minValue, int maxValue) {
-            Require.That(minValue <= maxValue, "minValue must be less than or equal to maxValue.");
-
             return Any.Value<int>(
                 new MinValueConstraint<int>(minValue),
                 new MaxValueConstraint<int>(maxValue)
             );
         }
 
+        public static long Long() {
+            return Any.Value<long>();
+        }
+
+        public static long Long(long maxValue) {
+            return Any.Value<long>(
+                new MaxValueConstraint<long>(maxValue)
+            );
+        }
+
+        public static long Long(long minValue, long maxValue) {
+            return Any.Value<long>(
+                new MinValueConstraint<long>(minValue),
+                new MaxValueConstraint<long>(maxValue)
+            );
+        }
+
+        public static byte Byte() {
+            return Any.Value<byte>();
+        }
+
+        public static byte Byte(byte maxValue) {
+            return Any.Value<byte>(
+                new MaxValueConstraint<byte>(maxValue)
+            );
+        }
+
+        public static byte Byte(byte minValue, byte maxValue) {
+            return Any.Value<byte>(
+                new MinValueConstraint<byte>(minValue),
+                new MaxValueConstraint<byte>(maxValue)
+            );
+        }
+
+        public static ushort UShort() {
+            return Any.Value<ushort>();
+        }
+
+        public static ushort UShort(ushort maxValue) {
+            return Any.Value<ushort>(
+                new MaxValueConstraint<ushort>(maxValue)
+            );
+        }
+
+        public static ushort UShort(ushort minValue, ushort maxValue) {
+            return Any.Value<ushort>(
+                new MinValueConstraint<ushort>(minValue),
+                new MaxValueConstraint<ushort>(maxValue)
+            );
+        }
+
+        public static uint UInt() {
+            return Any.Value<uint>();
+        }
+
+        public static uint UInt(uint maxValue) {
+            return Any.Value<uint>(
+                new MaxValueConstraint<uint>(maxValue)
+            );
+        }
+
+        public static uint UInt(uint minValue, uint maxValue) {
+            return Any.Value<uint>(
+                new MinValueConstraint<uint>(minValue),
+                new MaxValueConstraint<uint>(maxValue)
+            );
+        }
+
+        public static ulong ULong() {
+            return Any.Value<ulong>();
+        }
+
+        public static ulong ULong(ulong maxValue) {
+            return Any.Value<ulong>(
+                new MaxValueConstraint<ulong>(maxValue)
+            );
+        }
+
+        public static ulong ULong(ulong minValue, ulong maxValue) {
+            return Any.Value<ulong>(
+                new MinValueConstraint<ulong>(minValue),
+                new MaxValueConstraint<ulong>(maxValue)
+            );
+        }
+
         /// <summary>
-        /// Returns a random number between 0.0 and 1.0.
+        /// Returns a random float between 0.0 and 1.0.
         /// </summary>
-        /// <returns>A random number between 0.0 and 1.0.</returns>
+        /// <returns>A random float between 0.0 and 1.0.</returns>
+        public static float Float() {
+            return Any.Value<float>();
+        }
+
+        public static float Float(float maxValue) {
+            return Any.Value<float>(
+                new MaxValueConstraint<float>(maxValue)
+            );
+        }
+
+        public static float Float(float minValue, float maxValue) {
+            return Any.Value<float>(
+                new MinValueConstraint<float>(minValue),
+                new MaxValueConstraint<float>(maxValue)
+            );
+        }
+
+        /// <summary>
+        /// Returns a random double between 0.0 and 1.0.
+        /// </summary>
+        /// <returns>A random double between 0.0 and 1.0.</returns>
         public static double Double() {
             return Any.Value<double>();
         }
+
+        public static double Double(double maxValue) {
+            return Any.Value<double>(
+                new MaxValueConstraint<double>(maxValue)
+            );
+        }
+
+        public static double Double(double minValue, double maxValue) {
+            return Any.Value<double>(
+                new MinValueConstraint<double>(minValue),
+                new MaxValueConstraint<double>(maxValue)
+            );
+        }
+
+        /// <summary>
+        /// Returns a random decimal between 0.0 and 1.0.
+        /// </summary>
+        /// <returns>A random decimal between 0.0 and 1.0.</returns>
+        public static decimal Decimal() {
+            return Any.Value<decimal>();
+        }
+
+        public static decimal Decimal(decimal maxValue) {
+            return Any.Value<decimal>(
+                new MaxValueConstraint<decimal>(maxValue)
+            );
+        }
+
+        public static decimal Decimal(decimal minValue, decimal maxValue) {
+            return Any.Value<decimal>(
+                new MinValueConstraint<decimal>(minValue),
+                new MaxValueConstraint<decimal>(maxValue)
+            );
+        }
+
+        #endregion
     }
 }

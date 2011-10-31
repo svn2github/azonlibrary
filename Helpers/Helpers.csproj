@@ -58,6 +58,7 @@
     <Compile Include="Constructs\SwitchType\SwitchTypeWithResult.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Generators\Any.cs" />
+    <Compile Include="Generators\ValueGenerators\BaseNumberValueGenerator.cs" />
     <Compile Include="Generators\ValueGenerators\FractionalValueGenerator.cs" />
     <Compile Include="Reflection\AttachedProperty.cs" />
     <Compile Include="Generators\Fx.cs" />

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Azon.Helpers.Generators.ValueGenerators.Constraints;
 
 namespace Azon.Helpers.Generators.ValueGenerators {
-    public class NumericValueGenerator : ValueGenerator {
+    public class NumericValueGenerator : BaseNumberValueGenerator {
         private static readonly Random _random = new Random();
 
         protected override object GetRandomValueCore(Type type, IConstraint[] constraints) {
@@ -74,26 +73,6 @@ namespace Azon.Helpers.Generators.ValueGenerators {
             var range = absolute(maxValue) * (ulong)Math.Sign(maxValue) - absolute(minValue) * (ulong)Math.Sign(minValue);
 
             return minValue + valueScaled * range;
-        }
-
-        private T ApplyConstraints<T>(
-            IConstraint[] constraints, 
-            T minValue, 
-            T maxValue, 
-            Func<T, T, object> calculate
-        )
-            where T : struct 
-        {
-            var minValueConstraint = constraints.OfType<MinValueConstraint<T>>().SingleOrDefault();
-            var maxValueConstraint = constraints.OfType<MaxValueConstraint<T>>().SingleOrDefault();
-
-            if (minValueConstraint != null)
-                minValue = minValueConstraint.MinValue;
-
-            if (maxValueConstraint != null)
-                maxValue = maxValueConstraint.MaxValue;
-
-            return (T)Convert.ChangeType(calculate(minValue, maxValue), typeof(T));
         }
 
         public override IEnumerable<Type> ForTypes {

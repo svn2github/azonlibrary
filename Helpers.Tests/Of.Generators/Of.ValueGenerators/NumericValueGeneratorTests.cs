@@ -2,6 +2,7 @@
 
 using Azon.Helpers.Generators.ValueGenerators;
 using Azon.Helpers.Generators.ValueGenerators.Constraints;
+using Azon.Helpers.Tests.Internal.Asserts;
 
 using MbUnit.Framework;
 
@@ -17,7 +18,8 @@ namespace Azon.Helpers.Tests.Of.Generators.Of.ValueGenerators {
                     typeof(long),
                     typeof(byte),
                     typeof(ushort),
-                    typeof(uint)
+                    typeof(uint),
+                    typeof(ulong)
                 }; 
             }
         }
@@ -36,7 +38,7 @@ namespace Azon.Helpers.Tests.Of.Generators.Of.ValueGenerators {
         [Row(typeof(uint),   uint.MinValue + 40,   uint.MinValue + 50)]
         [Row(typeof(ulong),  ulong.MinValue + 40,  ulong.MinValue + 50)]
         public void ShouldReturnValueFromNarrowInterval<T>(T minValue, T maxValue)
-            where T : struct
+            where T : struct, IComparable<T>
         {
             var constraints = new IConstraint[] {
                 new MaxValueConstraint<T>(maxValue),
@@ -46,6 +48,19 @@ namespace Azon.Helpers.Tests.Of.Generators.Of.ValueGenerators {
             var value = this.Generator.GetRandomValue(typeof(T), constraints);
 
             Assert.Between(value, minValue, maxValue);
+        }
+
+        [Test]
+        public void ShouldThrowIfGivenMaxValueIsLessThanMinValue() {
+            var constraints = new IConstraint[] {
+                new MinValueConstraint<int>(5),
+                new MaxValueConstraint<int>(0)
+            };
+
+            ExceptionAssert.Throws<InvalidOperationException>(
+                () => this.Generator.GetRandomValue(typeof(int), constraints),
+                "minValue (5) should not be greater than maxValue (0)."
+            );
         }
     }
 }

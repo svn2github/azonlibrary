@@ -19,6 +19,7 @@ namespace Azon.Helpers.Tests.Of.Generators.Of.ValueGenerators {
         }
 
         public Type[] SupportedTypes { get; set; }
+        public Type[] SampleTypes { get; set; }
         public bool SkipUnsupportedTypeTest { get; set; }
 
         protected override IEnumerable<Test> GetContractVerificationTests() {
@@ -26,8 +27,17 @@ namespace Azon.Helpers.Tests.Of.Generators.Of.ValueGenerators {
                 var supportedType = type;
 
                 yield return new TestCase(
-                    string.Format("ShouldDeclareType{0}AsSupported", type.Name),
+                    string.Format("ShouldDeclareType{0}AsSupported", supportedType.Name),
                     () => Assert.Contains(this.Generator.ForTypes, supportedType)
+                );
+            }
+
+            foreach (var type in SampleTypes) {
+                var sampleType = type;
+
+                yield return new TestCase(
+                    string.Format("ShouldReturnValueOf{0}", sampleType.Name),
+                    () => Assert.IsInstanceOfType(sampleType, this.Generator.GetRandomValue(sampleType, new IConstraint[0]))
                 );
             }
 

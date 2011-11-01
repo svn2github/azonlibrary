@@ -128,5 +128,14 @@ namespace Azon.Helpers.Tests.Of.Constructs.Of.SwitchType {
                     .Otherwise(true)
             );
         }
+
+        [Test]
+        public void ShouldTriggerCorrectCaseThenGivenInstanceOfType() {
+            Assert.IsTrue(
+                Switch.Type<bool>(typeof(string))
+                    .When<string>(true)
+                    .Otherwise(false)
+            );
+        }
     }
 }

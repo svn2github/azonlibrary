@@ -14,7 +14,7 @@ namespace Azon.Helpers.Constructs {
         }
 
         public static ISwitchType Type(Type type, bool exactType = false) {
-            return Call.Generic(() => Switch.Type<Type>(exactType), type);
+            return Call.Generic<ISwitchType>(() => Switch.Type<Type>(exactType), type);
         }
 
         public static ISwitchTypeWithResult<T, TResult> Type<T, TResult>(T value, bool exactType = false) {
@@ -26,7 +26,7 @@ namespace Azon.Helpers.Constructs {
         }
 
         public static ISwitchTypeWithResult<TResult> Type<TResult>(Type type, bool exactType = false) {
-            return Call.Generic(() => Switch.Type<Type, TResult>(exactType), type, typeof(TResult));
+            return Call.Generic<ISwitchTypeWithResult<TResult>>(() => Switch.Type<Type, TResult>(exactType), type, typeof(TResult));
         }
     }
 }

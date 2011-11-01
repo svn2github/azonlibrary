@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 
 using Azon.Helpers.Constructs;
 
@@ -17,30 +16,23 @@ namespace Azon.Helpers.Utils {
 
         private static object Generic(MethodCallExpression methodCall, Type[] typeArgs) {
             var method = methodCall.Method.GetGenericMethodDefinition().MakeGenericMethod(typeArgs);
+            var target = ExtractParameter(methodCall.Object);
             var args = methodCall.Arguments.Select(ExtractParameter).ToArray();
 
-            return method.Invoke(methodCall.Object, args);
+            return method.Invoke(target, args);
         }
 
         private static object ExtractParameter(Expression parameter) {
-            return Switch.Type<Expression, object>(parameter)
-                .When<ConstantExpression>(constant => constant.Value)
-                .When<MemberExpression>(
-                    member => Switch.Type<MemberInfo, object>(member.Member)
-                        .When<FieldInfo>(field => field.GetValue(member))
-                        .When<PropertyInfo>(property => property.GetValue(member))
-                        .OtherwiseThrow<NotSupportedException>(
-                            "Member of type {0} is not supported.", member.Member.GetType()
-                        )
-                )
-                .OtherwiseThrow<NotSupportedException>(
-                    "Expression of type {0} is not supported.", parameter.GetType()
-                );
-        }
+            if (parameter == null)
+                return null;
 
-        //public static object Generic(Delegate action, Type[] typeArgs, params object[] args) {
-        //    var method = action.Generic.GetGenericMethodDefinition().MakeGenericMethod(typeArgs);
-        //    return method.Invoke(action.Target, args);
-        //}
+            return Switch.Type<Expression, object>(parameter)
+                         .When<LambdaExpression>(lambda => lambda.Compile().DynamicInvoke())
+                         .When<ConstantExpression>(constant => constant.Value)
+                         .When<Expression>(expr => Expression.Lambda(expr).Compile().DynamicInvoke())
+                         .OtherwiseThrow<NotSupportedException>(
+                             "Expression of type {0} is not supported.", parameter.GetType()
+                         );
+        }
     }
 }

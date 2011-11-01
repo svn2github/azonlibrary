@@ -17,6 +17,10 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return this;
         }
 
+        ISwitchType ISwitchType.When<TTry>(Action action) {
+            return this.When<TTry>(action);
+        }
+
         public void Otherwise(Action action) {
             this.Otherwise(value => action());
         }

@@ -12,11 +12,19 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return this.When<TTry>(value => func());
         }
 
+        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.When<TTry>(TResult result) {
+            return this.When<TTry>(result);
+        }
+
         public ISwitchTypeWithResult<T, TResult> When<TTry>(Func<TTry, TResult> func) {
             if (this.Matches<TTry>())
                 this._result = func((TTry)(object)this.Value);
 
             return this;
+        }
+
+        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.When<TTry>(Func<TResult> func) {
+            return this.When<TTry>(func);
         }
 
         public ISwitchTypeWithResult<T, TResult> When<TTry>(TResult result) {

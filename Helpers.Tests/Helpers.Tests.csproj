@@ -70,6 +70,7 @@
     <Compile Include="Of.Constructs\Of.SwitchType\SwitchTypeWithResultTests.cs" />
     <Compile Include="Of.Constructs\Of.SwitchType\SwitchTypeTests.cs" />
     <Compile Include="Of.Events\SubscribeTests.cs" />
+    <Compile Include="Of.Generators\Of.ValueGenerators\CollectionValueGeneratorTests.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\FractionalValueGeneratorTests.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\NumericValueGeneratorTests.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\ObjectValueGeneratorTests.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Of.Generators\Of.ValueGenerators\ValueGeneratorContract.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\ValueGeneratorTest.cs" />
     <Compile Include="Of.Reflection\NotifiablePropertyTests.cs" />
+    <Compile Include="Of.Utils\CallTests.cs" />
     <Compile Include="Of.Utils\GuardTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Of.Asserts\RequireTests.cs" />

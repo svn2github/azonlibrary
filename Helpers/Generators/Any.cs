@@ -289,5 +289,9 @@ namespace Azon.Helpers.Generators {
         }
 
         #endregion
+
+        public static string String() {
+            return Any.Value<string>();
+        }
     }
 }

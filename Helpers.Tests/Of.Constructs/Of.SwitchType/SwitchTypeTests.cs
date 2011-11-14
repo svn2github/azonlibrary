@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 using Azon.Helpers.Constructs;
+using Azon.Helpers.Constructs.SwitchType;
 using Azon.Helpers.Tests.Internal.Asserts;
 
 using MbUnit.Framework;
@@ -110,14 +114,43 @@ namespace Azon.Helpers.Tests.Of.Constructs.Of.SwitchType {
             );
         }
 
+        public IEnumerable<Func<ISwitchType, ISwitchType>> WronglyOrderedCases() {
+            yield return sw => sw.When<string>(() => { })
+                                 .When<string>(() => { });
+
+            yield return sw => sw.When<object>(() => { })
+                                 .When<string>(() => { });
+
+            yield return sw => sw.When<IEnumerable>(() => { })
+                                 .When<IList<int>>(() => { });
+
+            yield return sw => sw.When<IEnumerable<int>>(() => { })
+                                 .When<List<int>>(() => { });
+
+            yield return sw => sw.WhenOpen(typeof(ICollection<>), args => { })
+                                 .WhenOpen(typeof(IList<>), args => { });
+
+            yield return sw => sw.WhenOpen(typeof(ICollection<>), args => { })
+                                 .WhenOpen(typeof(List<>), args => { });
+
+            yield return sw => sw.When<IEnumerable>(() => { })
+                                 .WhenOpen(typeof(IList<>), args => { });
+
+            yield return sw => sw.When<IEnumerable>(() => { })
+                                 .WhenOpen(typeof(List<>), args => { });
+
+            yield return sw => sw.WhenOpen(typeof(IEnumerable<>), args => { })
+                                 .When<IList<int>>(() => { });
+
+            yield return sw => sw.WhenOpen(typeof(IEnumerable<>), args => { })
+                                 .When<List<int>>(() => { });
+        }
+            
         [Test]
-        public void ShouldThrowIfCasesAreInWrongOrder() {
+        [Factory("WronglyOrderedCases")]
+        public void ShouldThrowIfCasesAreInWrongOrder(Func<ISwitchType, ISwitchType> applyCases) {
             ExceptionAssert.Throws<InvalidOperationException>(
-                () => Switch.Type("string")
-                        .When<string>(str => { })
-                        .When<int>(number => { })
-                        .When<string>(str => { })
-                        .Otherwise(obj => { }),
+                () => applyCases(Switch.Type("string")).Otherwise(() => { }),
                 "Cases must be placed in accord to their generalization and should not duplicate."
             );
         }
@@ -134,14 +167,14 @@ namespace Azon.Helpers.Tests.Of.Constructs.Of.SwitchType {
         }
 
         [Test]
-        public void ShouldTriggerCaseOfExactTypeOnlyIfRequired() {
+        public void ShouldNotTriggerCaseMatchedByParentTypeIfExactTypeSpecified() {
             var called = false;
 
             Switch.Type<string>(exactType: true)
-                .When<object>(() => { })
-                .Otherwise(() => called = true);
+                .When<object>(() => called = true)
+                .Otherwise(() => { });
 
-            Assert.IsTrue(called);
+            Assert.IsFalse(called);
         }
 
         [Test]
@@ -153,6 +186,48 @@ namespace Azon.Helpers.Tests.Of.Constructs.Of.SwitchType {
                 .Otherwise(() => { });
 
             Assert.IsTrue(called);
+        }
+
+        [Test]
+        [Row(typeof(ICollection<string>))]
+        [Row(typeof(IList<string>))]
+        [Row(typeof(List<string>))]
+        public void ShouldTriggerGenericCaseThatMatchesType(Type type) {
+            var called = false;
+
+            Switch.Type(type)
+                .WhenOpen(typeof(ICollection<>), args => called = true)
+                .Otherwise(() => { });
+
+            Assert.IsTrue(called);
+        }
+
+        [Test]
+        public void ShouldPassGenericParametersIntoMatchedOpenCase() {
+            Switch.Type<IList<string>>()
+                .WhenOpen(typeof(ICollection<>), args => Assert.AreEqual(typeof(string), args.Single()))
+                .Otherwise(() => { });
+        }
+
+        [Test]
+        public void ShouldNotTriggerOpenCaseMatchedByParentTypeIfExactTypeSpecified() {
+            var called = false;
+
+            Switch.Type(typeof(IList<string>), exactType: true)
+                .WhenOpen(typeof(IEnumerable<>), args => called = true)
+                .Otherwise(() => { });
+
+            Assert.IsFalse(called);
+        }
+
+        [Test]
+        public void WhenGenericShouldThrowIfGivenTypeIsNotOpenGeneric() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Switch.Type(typeof(IList<string>))
+                            .WhenOpen(typeof(int), args => { })
+                            .Otherwise(() => { }),
+                "Type System.Int32 is not an open generic type.\r\nParameter name: type"
+            );
         }
     }
 }

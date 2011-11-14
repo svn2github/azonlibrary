@@ -4,7 +4,7 @@ namespace Azon.Helpers.Constructs.SwitchType {
     public interface ISwitchType {
         ISwitchType When<TTry>(Action action);
 
-        ISwitchType WhenGeneric(Type type, Action<Type[]> action);
+        ISwitchType WhenOpen(Type type, Action<Type[]> action);
 
         void Otherwise(Action action);
 
@@ -18,7 +18,7 @@ namespace Azon.Helpers.Constructs.SwitchType {
 
         ISwitchType<T> When<TTry>(Action<TTry> action);
 
-        new ISwitchType<T> WhenGeneric(Type type, Action<Type[]> action);
+        new ISwitchType<T> WhenOpen(Type type, Action<Type[]> action);
 
         void Otherwise(Action<T> action);
     }

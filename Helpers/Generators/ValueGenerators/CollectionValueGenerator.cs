@@ -32,9 +32,9 @@ namespace Azon.Helpers.Generators.ValueGenerators {
         private object TryConstructFromInterface(Type type) {
             return Switch
                 .Type<object>(type)
-                    .WhenGeneric(typeof(IList<>), args => Call.Generic(() => new List<Type>(), args))
-                    .WhenGeneric(typeof(ISet<>), args => Call.Generic(() => new HashSet<Type>(), args))
-                    .WhenGeneric(typeof(ICollection<>), args => Call.Generic(() => new Collection<Type>(), args))
+                    .WhenOpen(typeof(IList<>), args => Call.Generic(() => new List<Type>(), args))
+                    .WhenOpen(typeof(ISet<>), args => Call.Generic(() => new HashSet<Type>(), args))
+                    .WhenOpen(typeof(ICollection<>), args => Call.Generic(() => new Collection<Type>(), args))
                     .OtherwiseThrow<NotSupportedException>("Interface {0} is not supported.", type);
         }
 

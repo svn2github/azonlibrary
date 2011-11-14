@@ -6,9 +6,9 @@ namespace Azon.Helpers.Constructs.SwitchType {
 
         ISwitchTypeWithResult<TResult> When<TTry>(TResult result);
 
-        ISwitchTypeWithResult<TResult> WhenGeneric(Type type, Func<Type[], TResult> action);
+        ISwitchTypeWithResult<TResult> WhenOpen(Type type, Func<Type[], TResult> action);
 
-        ISwitchTypeWithResult<TResult> WhenGeneric(Type type, TResult result);
+        ISwitchTypeWithResult<TResult> WhenOpen(Type type, TResult result);
 
         TResult Otherwise(Func<TResult> func);
 
@@ -26,9 +26,9 @@ namespace Azon.Helpers.Constructs.SwitchType {
 
         new ISwitchTypeWithResult<T, TResult> When<TTry>(TResult result);
 
-        new ISwitchTypeWithResult<T, TResult> WhenGeneric(Type type, Func<Type[], TResult> action);
+        new ISwitchTypeWithResult<T, TResult> WhenOpen(Type type, Func<Type[], TResult> action);
 
-        new ISwitchTypeWithResult<T, TResult> WhenGeneric(Type type, TResult result);
+        new ISwitchTypeWithResult<T, TResult> WhenOpen(Type type, TResult result);
 
         TResult Otherwise(Func<T, TResult> func);
     }

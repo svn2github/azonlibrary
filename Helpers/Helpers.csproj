@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Utils\Call.cs" />
     <Compile Include="Constructs\SwitchType\ISwitchType.cs" />
     <Compile Include="Constructs\SwitchType\ISwitchTypeWithResult.cs" />

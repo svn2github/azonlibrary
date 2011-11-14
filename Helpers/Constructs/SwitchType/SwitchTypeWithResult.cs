@@ -18,18 +18,22 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return this.When<TTry>(result);
         }
 
-        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.WhenGeneric(Type type, Func<Type[], TResult> func) {
-            return this.WhenGeneric(type, func);
+        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.WhenOpen(Type type, Func<Type[], TResult> func) {
+            return this.WhenOpen(type, func);
         }
 
-        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.WhenGeneric(Type type, TResult result) {
-            return this.WhenGeneric(type, result);
+        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.WhenOpen(Type type, TResult result) {
+            return this.WhenOpen(type, result);
         }
 
         #endregion
 
         public ISwitchTypeWithResult<T, TResult> When<TTry>(Func<TResult> func) {
             return this.When<TTry>(value => func());
+        }
+
+        public ISwitchTypeWithResult<T, TResult> When<TTry>(TResult result) {
+            return this.When<TTry>(type => result);
         }
         
         public ISwitchTypeWithResult<T, TResult> When<TTry>(Func<TTry, TResult> func) {
@@ -39,19 +43,16 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return this;
         }
 
-        public ISwitchTypeWithResult<T, TResult> When<TTry>(TResult result) {
-            if (this.Matches<TTry>())
-                this._result = result;
+        public ISwitchTypeWithResult<T, TResult> WhenOpen(Type type, TResult result) {
+            return this.WhenOpen(type, args => result);
+        }
+
+        public ISwitchTypeWithResult<T, TResult> WhenOpen(Type type, Func<Type[], TResult> func) {
+            Type[] args;
+            if (this.MatchesGeneric(type, out args))
+                this._result = func(args);
 
             return this;
-        }
-
-        public ISwitchTypeWithResult<T, TResult> WhenGeneric(Type type, Func<Type[], TResult> func) {
-            throw new NotImplementedException();
-        }
-
-        public ISwitchTypeWithResult<T, TResult> WhenGeneric(Type type, TResult result) {
-            throw new NotImplementedException();
         }
 
         public TResult Otherwise(Func<TResult> func) {

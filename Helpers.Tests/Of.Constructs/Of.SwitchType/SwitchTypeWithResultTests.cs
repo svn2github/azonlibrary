@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.ServiceModel;
 
 using Azon.Helpers.Constructs;
 using Azon.Helpers.Constructs.SwitchType;
@@ -27,23 +28,23 @@ namespace Azon.Helpers.Tests.Of.Constructs.Of.SwitchType {
         }
 
         public IEnumerable<Data> SingleCases() {
-            //yield return new Data(typeof(string), sw => sw.When<string>(true));
-            //yield return new Data(typeof(string), sw => sw.When<object>(true));
+            yield return new Data(typeof(string), sw => sw.When<string>(true));
+            yield return new Data(typeof(string), sw => sw.When<object>(true));
 
-            //yield return new Data(typeof(List<string>), sw => sw.When<IList<string>>(true));
-            //yield return new Data(typeof(List<string>), sw => sw.When<IList>(true));
-            //yield return new Data(typeof(List<string>), sw => sw.WhenOpen(typeof(IList<>), true));
-            //yield return new Data(typeof(List<string>), sw => sw.WhenOpen(typeof(IEnumerable<>), true));
+            yield return new Data(typeof(List<string>), sw => sw.When<IList<string>>(true));
+            yield return new Data(typeof(List<string>), sw => sw.When<IList>(true));
+            yield return new Data(typeof(List<string>), sw => sw.WhenOpen(typeof(IList<>), true));
+            yield return new Data(typeof(List<string>), sw => sw.WhenOpen(typeof(IEnumerable<>), true));
 
-            //yield return new Data(typeof(IList<string>), sw => sw.When<IList<string>>(true));
-            //yield return new Data(typeof(IList<string>), sw => sw.When<IEnumerable<string>>(true));
-            //yield return new Data(typeof(IList<string>), sw => sw.When<IEnumerable>(true));
-            //yield return new Data(typeof(IList<string>), sw => sw.WhenOpen(typeof(IList<>), true));
-            //yield return new Data(typeof(IList<string>), sw => sw.WhenOpen(typeof(IEnumerable<>), true));
-            
-            //yield return new Data(typeof(Expression<string>), sw => sw.When<Expression<string>>(true));
-            //yield return new Data(typeof(Expression<string>), sw => sw.When<LambdaExpression>(true));
-            //yield return new Data(typeof(Expression<string>), sw => sw.When<Expression>(true));
+            yield return new Data(typeof(IList<string>), sw => sw.When<IList<string>>(true));
+            yield return new Data(typeof(IList<string>), sw => sw.When<IEnumerable<string>>(true));
+            yield return new Data(typeof(IList<string>), sw => sw.When<IEnumerable>(true));
+            yield return new Data(typeof(IList<string>), sw => sw.WhenOpen(typeof(IList<>), true));
+            yield return new Data(typeof(IList<string>), sw => sw.WhenOpen(typeof(IEnumerable<>), true));
+
+            yield return new Data(typeof(Expression<string>), sw => sw.When<Expression<string>>(true));
+            yield return new Data(typeof(Expression<string>), sw => sw.When<LambdaExpression>(true));
+            yield return new Data(typeof(Expression<string>), sw => sw.When<Expression>(true));
             yield return new Data(typeof(Expression<string>), sw => sw.WhenOpen(typeof(Expression<>), true));
         }
 
@@ -53,6 +54,17 @@ namespace Azon.Helpers.Tests.Of.Constructs.Of.SwitchType {
             Assert.IsTrue(
                 data.ApplyCases(Switch.Type<bool>(data.TestedType)).Otherwise(false)
             );
+        }
+
+        [Test]
+        public void ShouldTriggerCaseBasingOfActualTypeInsteadOfDeclared() {
+            var exception = new FaultException<string>("string");
+            var result = Switch
+                .Type<object, bool>(exception)
+                    .WhenOpen(typeof(FaultException<>), true)
+                    .Otherwise(false);
+
+            Assert.IsTrue(result);
         }
 
         [Test]

@@ -8,7 +8,7 @@
     <owners>$author$</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>Fixed bug in SwitchType when it used declared type instead of actual.</releaseNotes>
     <copyright>Copyright 2011</copyright>
     <tags>Helpers Extensions</tags>
   </metadata>

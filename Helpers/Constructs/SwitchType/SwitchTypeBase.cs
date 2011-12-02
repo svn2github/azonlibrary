@@ -12,12 +12,16 @@ namespace Azon.Helpers.Constructs.SwitchType {
 
         protected T Value { get; private set; }
         protected bool Matched { get; private set; }
+        protected Type TestedType { get; private set; }
 
         protected SwitchTypeBase(bool exactType, T value) {
             this._observed = new List<Type>();
             this._exactType = exactType;
+
             this.Value = value;
             this.Matched = false;
+            this.TestedType = Object.Equals(this.Value, default(T)) ? typeof(T)
+                                                                    : this.Value.GetType();
         }
 
         protected bool Matches<TTry>() {
@@ -53,22 +57,19 @@ namespace Azon.Helpers.Constructs.SwitchType {
         }
 
         private bool TypeMatches<TTry>() {
-            if (Object.Equals(this.Value, default(T)))
-                return (this._exactType && typeof(TTry) == typeof(T))
-                    || (!this._exactType && typeof(TTry).IsAssignableFrom<T>());
-
-            return (this._exactType && typeof(TTry) == this.Value.GetType())
-                || (!this._exactType && typeof(TTry).IsInstanceOfType(this.Value));
+            return (this._exactType && typeof(TTry) == this.TestedType)
+                || (!this._exactType && typeof(TTry).IsAssignableFrom(this.TestedType));
         }
 
         private bool TypeMatchesGeneric(Type type, out Type[] args) {
             if (this._exactType) {
-                args = typeof(T).IsGenericDefinedAs(type) ? typeof(T).GetGenericArguments()
-                                                          : null;
+                args = this.TestedType.IsGenericDefinedAs(type)
+                            ? this.TestedType.GetGenericArguments()
+                            : null;
             }
             else {
-                var testingTypes = type.IsInterface ? typeof(T).GetInterfaces(includeSelf: true)
-                                                    : typeof(T).GetHierarchy(includeSelf: true);
+                var testingTypes = type.IsInterface ? this.TestedType.GetInterfaces(includeSelf: true)
+                                                    : this.TestedType.GetHierarchy(includeSelf: true);
                 var closedGeneric = testingTypes.FirstOrDefault(i => i.IsGenericDefinedAs(type));
 
                 args = (closedGeneric != null) ? closedGeneric.GetGenericArguments()

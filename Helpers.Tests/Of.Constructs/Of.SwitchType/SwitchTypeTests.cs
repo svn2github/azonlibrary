@@ -88,6 +88,15 @@ namespace Azon.Helpers.Tests.Of.Constructs.Of.SwitchType {
         }
 
         [Test]
+        public void ShouldNotThrowByDefaultIfOtherMatches() {
+            ExceptionAssert.DoesNotThrow(
+                () => Switch.Type("string")
+                          .When<string>(str => { })
+                          .OtherwiseThrow("Should not throw")
+            );
+        }
+
+        [Test]
         public void ShouldTriggerDefaultIfNoOtherMatches() {
             var called = false;
 

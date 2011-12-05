@@ -10,9 +10,9 @@ namespace Azon.Helpers.Constructs.SwitchType {
 
         ISwitchTypeWithResult<TResult> WhenOpen(Type type, TResult result);
 
-        TResult Otherwise(Func<TResult> func);
-
         TResult Otherwise(TResult result);
+        
+        TResult Otherwise(Func<TResult> func);
 
         TResult OtherwiseThrow(string message, params object[] args);
 

@@ -55,6 +55,9 @@ namespace Azon.Helpers.Constructs.SwitchType {
         public void OtherwiseThrow<TException>(string message, params object[] args) 
             where TException : Exception
         {
+            if (this.Matched)
+                return;
+
             throw Require.Exception<TException>(message, args);
         }
     }

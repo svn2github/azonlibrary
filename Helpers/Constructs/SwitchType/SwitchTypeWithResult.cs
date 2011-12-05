@@ -55,6 +55,10 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return this;
         }
 
+        public TResult Otherwise(TResult result) {
+            return this.Otherwise(value => result);
+        }
+
         public TResult Otherwise(Func<TResult> func) {
             return this.Otherwise(value => func());
         }
@@ -62,11 +66,6 @@ namespace Azon.Helpers.Constructs.SwitchType {
         public TResult Otherwise(Func<T, TResult> func) {
             return this.Matched ? this._result
                                 : func(this.Value);
-        }
-
-        public TResult Otherwise(TResult result) {
-            return this.Matched ? this._result
-                                : result;
         }
 
         public TResult OtherwiseThrow(string message, params object[] args) {

@@ -59,11 +59,24 @@ namespace Azon.Helpers.Asserts {
                 Require.Exception<T>(message, args);
         }
 
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException" /> if a given enumeration is null.<para />
+        /// Throws <see cref="ArgumentException" /> if a given enumeration has no elements.
+        /// </summary>
+        /// <param name="items">An enumeration to test.</param>
+        /// <param name="parameterName">A name of parameter for the exception to throw.</param>
         public static void NotEmpty(IEnumerable items, string parameterName) {
             Require.NotNull(items, parameterName);
             Require.NotEmpty<ArgumentException>(items, "Sequence should contain elements.", parameterName);
         }
 
+        /// <summary>
+        /// Throws an exception of a given type if a given enumeration is null or has no elements.
+        /// </summary>
+        /// <typeparam name="T">A type of exception to throw.</typeparam>
+        /// <param name="items">An enumeration to test.</param>
+        /// <param name="message">A message for the exception to throw.</param>
+        /// <param name="args">Optional parameters to format a message with.</param>
         public static void NotEmpty<T>(IEnumerable items, string message, params object[] args) 
             where T : Exception 
         {

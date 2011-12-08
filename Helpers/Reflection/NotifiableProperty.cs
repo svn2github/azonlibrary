@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 
+using Azon.Helpers.Asserts;
+
 namespace Azon.Helpers.Reflection {
     public static class NotifiableProperty {
         private abstract class NotificationSource : INotifyPropertyChanged, INotifyPropertyChanging {
@@ -10,6 +12,8 @@ namespace Azon.Helpers.Reflection {
             public event PropertyChangingEventHandler PropertyChanging;
 
             public void RaiseChanged(string propertyName) {
+                Require.NotEmpty(propertyName, "propertyName");
+
                 if (this.PropertyChanged == null)
                     return;
 
@@ -17,6 +21,8 @@ namespace Azon.Helpers.Reflection {
             }
 
             public void RaiseChanging(string propertyName) {
+                Require.NotEmpty(propertyName, "propertyName");
+
                 if (this.PropertyChanging == null)
                     return;
 

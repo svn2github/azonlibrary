@@ -23,9 +23,10 @@ namespace Azon.Helpers.Tests.Of.Extensions {
         }
 
         [Test]
-        public void IsGenericDefinedAsShouldReturnFalseIfGivenTypeIsNull() {
-            Assert.IsFalse(
-                typeof(int).IsGenericDefinedAs(null)
+        public void IsGenericDefinedAsShouldThrowIfGivenIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => typeof(int).IsGenericDefinedAs(null),
+                ex => Assert.AreEqual("otherType", ex.ParamName)
             );
         }
 
@@ -188,6 +189,14 @@ namespace Azon.Helpers.Tests.Of.Extensions {
         }
 
         [Test]
+        public void InheritsShouldThrowIfGivenTypeIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => typeof(int).Inherits(null),
+                ex => Assert.AreEqual("parentType", ex.ParamName)
+            );
+        }
+
+        [Test]
         [Row(typeof(string), typeof(object))]
         [Row(typeof(Expression<string>), typeof(LambdaExpression))]
         [Row(typeof(Expression<>), typeof(LambdaExpression))]
@@ -218,6 +227,14 @@ namespace Azon.Helpers.Tests.Of.Extensions {
             ExceptionAssert.Throws<ArgumentNullException>(
                 () => (null as Type).Implements(typeof(int)),
                 ex => Assert.AreEqual("type", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void ImplementsShouldThrowIfGivenInterfaceIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => typeof(int).Implements(null),
+                ex => Assert.AreEqual("interface", ex.ParamName)
             );
         }
 

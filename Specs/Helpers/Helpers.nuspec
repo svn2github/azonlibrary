@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>Azon.Helpers</id>
-    <version>1.0.0.6</version>
+    <version>1.0.0.7</version>
     <title>Azon.Helpers</title>
     <authors>Eugene Strizhok</authors>
     <owners>Eugene Strizhok</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A set of fairly small and simple but often required helper classes.</description>
-    <releaseNotes>Fixed bug in SwitchType when it used declared type instead of actual.</releaseNotes>
+    <releaseNotes>Created Silverlight 5.0 version of the library.</releaseNotes>
     <copyright>Copyright 2011</copyright>
     <tags>Helpers Extensions</tags>
   </metadata>

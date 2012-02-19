@@ -21,7 +21,6 @@ namespace Azon.Helpers.Utils {
             get { return this._inner.IsAlive; }
         }
     }
-}
 #else
     /// <summary>
     /// A typed <see cref="WeakReference"/>.

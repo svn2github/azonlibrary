@@ -5,6 +5,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{06ADED2C-604B-4B74-8E5B-512857EDACAA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{661CCCA3-7CFA-4D2F-8D08-D6FF4C49E85E}"
+	ProjectSection(SolutionItems) = preProject
+		Azon.Library.build = Azon.Library.build
+		Packages.build = Packages.build
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specs", "Specs", "{150C0C37-CEDA-4BC8-91AD-4F1561724BE1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{D4850C14-77A5-4670-8FF0-B79B68FA606D}"
+	ProjectSection(SolutionItems) = preProject
+		Specs\Helpers\Helpers.nuspec = Specs\Helpers\Helpers.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 3
@@ -34,5 +47,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D4850C14-77A5-4670-8FF0-B79B68FA606D} = {150C0C37-CEDA-4BC8-91AD-4F1561724BE1}
 	EndGlobalSection
 EndGlobal

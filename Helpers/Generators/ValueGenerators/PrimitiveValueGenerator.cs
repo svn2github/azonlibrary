@@ -16,7 +16,11 @@ namespace Azon.Helpers.Generators.ValueGenerators {
                 return _random.NextDouble() > 0.5;
 
             if (type == typeof(string))
+#if !SILVERLIGHT
                 return Path.GetRandomFileName();
+#else
+                return Guid.NewGuid().ToString();
+#endif
 
             if (type == typeof(Guid))
                 return Guid.NewGuid();

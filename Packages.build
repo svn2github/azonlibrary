@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project DefaultTargets="Release" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Version Condition="$(Version)==''">0.0.0.0</Version>
+    <BuildPath>$(MSBuildProjectDirectory)\Build</BuildPath>
+    <ArtifactPath>$(BuildPath)\Library</ArtifactPath>
+    <PackageDefinitionSourcePath>$(MSBuildProjectDirectory)\Specs</PackageDefinitionSourcePath>
+    <PackageWorkingPath>$(MSBuildProjectDirectory)\PackageBuild</PackageWorkingPath>
+    <ArtifactTemp>$(PackageWorkingPath)\Library</ArtifactTemp>
+    <PackageDefinitionPath>$(PackageWorkingPath)\PackageTemp</PackageDefinitionPath>
+    <NuGetExe>nuget.exe</NuGetExe>
+    <HelpersBuild>$(MSBuildProjectDirectory)\Azon.Library.build</HelpersBuild>
+    
+    <PackageOutput>$(PackageWorkingPath)\Package</PackageOutput>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <HelpersSpecPath>$(PackageDefinitionPath)\Helpers</HelpersSpecPath>
+    <HelpersSpec>$(HelpersSpecPath)\Helpers.nuspec</HelpersSpec>
+  </PropertyGroup>
+
+  <Target Name="Clean">
+    <RemoveDir Directories="$(PackageWorkingPath)" />
+  </Target>
+
+  <Target Name="Prepare">
+    <MakeDir Directories="$(PackageWorkingPath)" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="Net40Build">
+    <MSBuild Projects="$(HelpersBuild)"
+             Properties="Version=$(Version);BuildFramework=NET40" 
+             Targets="Distrib" />
+    
+    <MakeDir Directories="$(ArtifactTemp)\NET40"/>
+    
+    <CreateItem Include="$(ArtifactPath)\*.*">
+      <Output ItemName="Net40Artifact" TaskParameter="Include"/>
+    </CreateItem>
+    
+    <Copy SourceFiles="@(Net40Artifact)" DestinationFolder="$(ArtifactTemp)\NET40" />
+  </Target>
+
+  <Target Name="Sl5Build">
+    <MSBuild Projects="$(HelpersBuild)" 
+             Properties="Version=$(Version);BuildFramework=SL5" 
+             Targets="Distrib" />
+    
+    <MakeDir Directories="$(ArtifactTemp)\SL5"/>
+    
+    <CreateItem Include="$(ArtifactPath)\*.*">
+      <Output ItemName="Sl5Artifact" TaskParameter="Include"/>
+    </CreateItem>
+    
+    <Copy SourceFiles="@(Sl5Artifact)" DestinationFolder="$(ArtifactTemp)\SL5" />
+  </Target>
+
+  <Target Name="Build">
+    <CallTarget Targets="Net40Build" />
+    <CallTarget Targets="Sl5Build" />
+  </Target>
+
+  <Target Name="CopyLibs">
+    <Copy SourceFiles="$(ArtifactTemp)\NET40\Azon.Helpers.dll" DestinationFolder="$(HelpersSpecPath)\lib\NET40" />
+    <Copy SourceFiles="$(ArtifactTemp)\SL5\Azon.Helpers.dll"   DestinationFolder="$(HelpersSpecPath)\lib\SL5" />
+  </Target>
+
+  <Target Name="Pack">
+    <CreateItem Include="$(PackageDefinitionSourcePath)\**\*.*">
+      <Output ItemName="PackageContent" TaskParameter="Include"/>
+    </CreateItem>
+    <Copy SourceFiles="@(PackageContent)" 
+          DestinationFiles="@(PackageContent->'$(PackageDefinitionPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+    <CreateItem Include="$(HelpersSpec)">
+      <Output ItemName="NuGetSpec" TaskParameter="Include"/>
+    </CreateItem>
+    
+    <CallTarget Targets="CopyLibs" />
+    <MakeDir Directories="$(PackageOutput)" ContinueOnError="true"/>
+    <Exec Command='$(NuGetExe) pack "%(NuGetSpec.FullPath)"' WorkingDirectory="$(PackageOutput)"/>
+  </Target>
+
+  <Target Name="Release" DependsOnTargets="Clean;Prepare;Build;Pack"/>
+</Project>

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-using AshMind.Extensions;
+using Azon.Helpers.Extensions;
 
 namespace Azon.Helpers.Reflection {
     public static class AttachedProperty {

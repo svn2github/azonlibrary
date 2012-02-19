@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Generators.ValueGenerators.Constraints;
@@ -28,7 +29,11 @@ namespace Azon.Helpers.Generators.ValueGenerators {
                 minValue, maxValue
             );
 
-            return (T)Convert.ChangeType(calculate(minValue, maxValue), typeof(T));
+            return (T)Convert.ChangeType(
+                calculate(minValue, maxValue),
+                typeof(T),
+                Thread.CurrentThread.CurrentCulture
+            );
         }
     }
 }

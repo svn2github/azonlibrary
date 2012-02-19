@@ -1,11 +1,35 @@
 using System;
 
 namespace Azon.Helpers.Utils {
+#if SILVERLIGHT
+    public class Weak<T>
+        where T : class 
+    {
+        private readonly WeakReference _inner;
+
+        public Weak(T target) : this(target, true) { }
+
+        public Weak(T target, bool trackResurrection) {
+            _inner = new WeakReference(target, trackResurrection);
+        }
+
+        public T Target {
+            get { return (T)this._inner.Target; }
+        }
+
+        public bool IsAlive {
+            get { return this._inner.IsAlive; }
+        }
+    }
+}
+#else
     /// <summary>
     /// A typed <see cref="WeakReference"/>.
     /// </summary>
     /// <typeparam name="T">A type of value to store as a weak reference.</typeparam>
-    public class Weak<T> : WeakReference {
+    public class Weak<T> : WeakReference
+        where T : class
+    {
         /// <summary>
         /// Initializes a new instance of <see cref="Weak{T}"/>.
         /// </summary>
@@ -29,4 +53,5 @@ namespace Azon.Helpers.Utils {
             get { return (T)base.Target; }
         }
     }
+#endif
 }

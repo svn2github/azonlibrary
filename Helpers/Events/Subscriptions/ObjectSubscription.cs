@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-using AshMind.Extensions;
-
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Events.Subscriptions.Clauses;
 using Azon.Helpers.Events.Subscriptions.Infos;
 using Azon.Helpers.Events.Subscriptions.Subscribers;
+using Azon.Helpers.Extensions;
 using Azon.Helpers.Reflection;
 
 namespace Azon.Helpers.Events.Subscriptions {

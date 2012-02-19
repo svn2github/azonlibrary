@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using AshMind.Extensions;
-
 using Azon.Helpers.Asserts;
+using Azon.Helpers.Extensions;
 using Azon.Helpers.Generators.ValueGenerators;
 using Azon.Helpers.Generators.ValueGenerators.Constraints;
 
@@ -69,7 +68,7 @@ namespace Azon.Helpers.Generators {
             Require.NotNull(type, "type");
 
             var generator = _generators.FirstOrDefault(pair => pair.Key.IsAssignableFrom(type)
-                                                            || type.IsGenericTypeDefinedAs(pair.Key));
+                                                            || type.IsGenericDefinedAs(pair.Key));
             if (generator.Equals(_notFound))
                 throw new NotSupportedException(string.Format("No generators supporting type {0} is registered.", type));
 

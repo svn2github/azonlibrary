@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
-using AshMind.Extensions;
-
 using Azon.Helpers.Asserts;
+using Azon.Helpers.Extensions;
 
 namespace Azon.Helpers.Events.Subscriptions {
     internal class AggregateSubscription : BaseSubscription {

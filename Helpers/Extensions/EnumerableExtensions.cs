@@ -1,19 +1,128 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using Azon.Helpers.Asserts;
-using Azon.Helpers.Constructs;
+
+using Switch = Azon.Helpers.Constructs.Switch;
 
 namespace Azon.Helpers.Extensions {
     public static class EnumerableExtensions {
-        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action) {
-            Require.NotNull(items, "items");
+        [DebuggerStepThrough]
+        public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) {
+            Require.NotNull(source, "source");
+            Require.NotNull(source, "predicate");
+
+            var index = 0;
+            foreach (var item in source) {
+                if (predicate(item, index))
+                    return true;
+
+                index += 1;
+            }
+
+            return false;
+        }
+
+        [DebuggerStepThrough]
+        public static HashSet<TSource> ToSet<TSource>(this IEnumerable<TSource> source) {
+            Require.NotNull(source, "source");
+            return new HashSet<TSource>(source);
+        }
+
+        [DebuggerStepThrough]
+        public static HashSet<TSource> ToSet<TSource>(
+            this IEnumerable<TSource> source,
+            IEqualityComparer<TSource> comparer
+        ) {
+            Require.NotNull(source, "source");
+            return new HashSet<TSource>(source, comparer);
+        }
+
+
+        [DebuggerStepThrough]
+        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action) {
+            source.ForEach((item, index) => action(item));
+        }
+
+        [DebuggerStepThrough]
+        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action) {
+            Require.NotNull(source, "source");
             Require.NotNull(action, "action");
 
-            foreach (var item in items) {
-                action(item);
+            var index = 0;
+            foreach (var item in source) {
+                action(item, index);
+                index += 1;
             }
+        }
+
+
+        [DebuggerStepThrough]
+        public static IEnumerable<TSource> Except<TSource>(this IEnumerable<TSource> source, TSource item) {
+            Require.NotNull(source, "source");
+
+            return source.Where(eachItem => !Object.Equals(eachItem, item));
+        }
+
+
+        [DebuggerStepThrough]
+        public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> source, TSource item) {
+            Require.NotNull(source, "source");
+
+            foreach (var each in source) {
+                yield return each;
+            }
+            yield return item;
+        }
+
+        [DebuggerStepThrough]
+        public static IEnumerable<TSource> HavingMax<TSource, TValue>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TValue> selector
+        ) {
+            return source.HavingMaxOrMin(selector, 1);
+        }
+
+        [DebuggerStepThrough]
+        public static IEnumerable<TSource> HavingMin<TSource, TValue>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TValue> selector
+        ) {
+            return source.HavingMaxOrMin(selector, -1);
+        }
+
+        [DebuggerStepThrough]
+        private static IEnumerable<TSource> HavingMaxOrMin<TSource, TValue>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TValue> selector,
+            int comparison
+        ) {
+            Require.NotNull(source, "source");
+            Require.NotNull(selector, "selector");
+
+            var selectedItems = new List<TSource>();
+            var selectedValue = default(TValue);
+            var selected = false;
+            var comparer = Comparer<TValue>.Default;
+
+            foreach (var item in source) {
+                var compared = comparer.Compare(selector(item), selectedValue);
+                
+                if (!selected || compared == comparison) {
+                    selectedItems = new List<TSource> { item };
+                    selectedValue = selector(item);
+                    selected = true;
+
+                    continue;
+                }
+
+                if (compared == 0)
+                    selectedItems.Add(item);
+            }
+
+            return selectedItems;
         }
 
         public static IEnumerable<T> Sort<T>(this IEnumerable<T> items, Func<T, T, bool> predicate) {

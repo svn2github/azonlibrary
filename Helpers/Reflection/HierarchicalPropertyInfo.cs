@@ -44,9 +44,11 @@ namespace Azon.Helpers.Reflection {
             return LastProperty.IsDefined(attributeType, inherit);
         }
 
+#if !SILVERLIGHT
         public override IList<CustomAttributeData> GetCustomAttributesData() {
             return LastProperty.GetCustomAttributesData();
         }
+#endif
 
         public override string Name {
             get { return LastProperty.Name; }
@@ -92,6 +94,7 @@ namespace Azon.Helpers.Reflection {
             return LastProperty.GetIndexParameters();
         }
 
+#if !SILVERLIGHT
         public override Type[] GetRequiredCustomModifiers() {
             return LastProperty.GetRequiredCustomModifiers();
         }
@@ -99,6 +102,7 @@ namespace Azon.Helpers.Reflection {
         public override Type[] GetOptionalCustomModifiers() {
             return LastProperty.GetOptionalCustomModifiers();
         }
+#endif
 
         public override MemberTypes MemberType {
             get { return LastProperty.MemberType; }

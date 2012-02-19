@@ -70,6 +70,7 @@
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="Of.Constructs\Of.SwitchType\SwitchTypeWithResultTests.cs" />
     <Compile Include="Of.Constructs\Of.SwitchType\SwitchTypeTests.cs" />
+    <Compile Include="Of.Events\BindTests.cs" />
     <Compile Include="Of.Events\SubscribeTests.cs" />
     <Compile Include="Of.Extensions\TypeExtensionsTests.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\CollectionValueGeneratorTests.cs" />

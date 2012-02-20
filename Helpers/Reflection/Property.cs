@@ -78,5 +78,30 @@ namespace Azon.Helpers.Reflection {
             Require.NotNull(reference, "reference");
             return Hierarchy(reference).PropertyType;
         }
+
+        public static void Set<T>(Expression<Func<T>> reference, T value) {
+            Require.NotNull(reference, "reference");
+
+            var hierarchy = Hierarchy(reference);
+            var root = GetRoot((MemberExpression)reference.Body);
+
+            hierarchy.SetValue(root, value, null);
+        }
+
+        private static object GetRoot(MemberExpression member) {
+            var next = member;
+
+            while (next != null) {
+                var field = next.Member as FieldInfo;
+                var constant = next.Expression as ConstantExpression;
+
+                if (field != null && constant != null)
+                    return field.GetValue(constant.Value);        
+
+                next = next.Expression as MemberExpression;
+            }
+
+            return null;
+        }
     }
 }

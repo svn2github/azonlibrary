@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Linq.Expressions;
 
+using Azon.Helpers.Asserts;
+using Azon.Helpers.Events.Bindings.Clauses;
+
 namespace Azon.Helpers.Events {
     public static class Bind {
-        public static BindingBuilder Property<TSource>(Expression<Func<TSource>> reference) {
-            return new BindingBuilder();
-        }
-    }
+        public static IBindingOptionsClause Property<TSource>(Expression<Func<TSource>> source) {
+            Require.NotNull(source, "source");
 
-    public class BindingBuilder {
-        public BindingBuilder() {
-            
-        }
-
-        public void To<TTarget>(Expression<Func<TTarget>> reference) {
+            return new BindingOptionsClause<TSource>(source);
         }
     }
 }

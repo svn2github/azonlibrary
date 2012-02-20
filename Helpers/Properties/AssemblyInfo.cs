@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 
 [assembly: AssemblyTitle("Azon.Helpers")]
 [assembly: AssemblyDescription("A set of fairly small and simple but often required helper classes.")]

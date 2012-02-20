@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 
 [assembly: AssemblyTitle("Azon.Helpers.Tests")]
 [assembly: AssemblyDescription("")]

@@ -32,13 +32,13 @@ namespace Azon.Helpers.Events.Subscriptions.Subscribers {
 
         protected virtual void OnEvent(object sender, TArgs e) {
             lock (this.infos) {
-                this.infos.RemoveWhere(info => info.Action.Target == null);
+                this.infos.RemoveWhere(info => !info.IsAlive);
                 this.infos.Where(this.Filter(e)).ForEach(this.Handler(e));
             }
         }
 
         protected virtual Action<ISubscriptionInfo> Handler(TArgs e) {
-            return info => info.Action.Target(this.entity, e);
+            return info => info.Action(this.entity, e);
         }
 
         protected abstract Func<ISubscriptionInfo, bool> Filter(TArgs e);

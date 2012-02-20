@@ -82,6 +82,7 @@
     <Compile Include="Of.Generators\Of.ValueGenerators\ValueGeneratorContract.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\ValueGeneratorTest.cs" />
     <Compile Include="Of.Reflection\NotifiablePropertyTests.cs" />
+    <Compile Include="Of.Reflection\PropertyTests.cs" />
     <Compile Include="Of.Utils\CallTests.cs" />
     <Compile Include="Of.Utils\GuardTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

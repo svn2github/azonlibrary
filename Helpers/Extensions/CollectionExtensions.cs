@@ -38,7 +38,7 @@ namespace Azon.Helpers.Extensions {
 
             var concreteList = collection as List<T>;
             if (concreteList != null)
-                return concreteList.RemoveAll(predicate.AsPredicate());
+                return concreteList.RemoveAll(new Predicate<T>(predicate));
 
             var virtualList = collection as IList<T>;
             if (virtualList != null)
@@ -46,7 +46,7 @@ namespace Azon.Helpers.Extensions {
 
             var set = collection as HashSet<T>;
             if (set != null)
-                return set.RemoveWhere(predicate.AsPredicate());
+                return set.RemoveWhere(new Predicate<T>(predicate));
 
             var values = collection.Where(predicate).ToList();
             collection.RemoveAll(values);

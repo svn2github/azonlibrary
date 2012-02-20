@@ -48,6 +48,24 @@
   <ItemGroup>
     <Compile Include="Comparers\DelegateBasedComparer.cs" />
     <Compile Include="Events\Bind.cs" />
+    <Compile Include="Events\Bindings\Clauses\BindingOptionsClause.cs">
+      <DependentUpon>IBindingOptionsClause.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\Bindings\Binder.cs" />
+    <Compile Include="Events\Bindings\Clauses\UsingConverterClause.cs">
+      <DependentUpon>IUsingConverterClause.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\Bindings\BindingInfo.cs" />
+    <Compile Include="Events\Bindings\BindingMode.cs" />
+    <Compile Include="Events\Bindings\Clauses\BindingModeClause.cs">
+      <DependentUpon>IBindingModeClause.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Events\Bindings\Dependency.cs" />
+    <Compile Include="Events\Bindings\DependencyCollector.cs" />
+    <Compile Include="Events\Bindings\Clauses\IBindingModeClause.cs" />
+    <Compile Include="Events\Bindings\Clauses\IUsingConverterClause.cs" />
+    <Compile Include="Events\Bindings\IValueConverter.cs" />
+    <Compile Include="Events\Bindings\Clauses\IBindingOptionsClause.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
@@ -61,6 +79,7 @@
     <Compile Include="Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeExtensions.cs" />
+    <Compile Include="Utils\Disposables\AnonymousDisposable.cs" />
     <Compile Include="Utils\Call.cs" />
     <Compile Include="Constructs\SwitchType\ISwitchType.cs" />
     <Compile Include="Constructs\SwitchType\ISwitchTypeWithResult.cs" />
@@ -79,6 +98,7 @@
     <Compile Include="Generators\Fx.cs" />
     <Compile Include="Reflection\Reflect.cs" />
     <Compile Include="Reflection\NotifiableProperty.cs" />
+    <Compile Include="Utils\Disposable.cs" />
     <Compile Include="Utils\Guard.cs" />
     <Compile Include="Reflection\HierarchicalPropertyInfo.cs" />
     <Compile Include="Utils\Weak.cs" />
@@ -114,6 +134,7 @@
     <Compile Include="Generators\ValueGenerators\PrimitiveValueGenerator.cs" />
     <Compile Include="Generators\ValueGenerators\ValueGenerator.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="($(BuildFramework) == '') Or ($(BuildFramework) == 'NET40')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" Condition="$(BuildFramework) == 'SL5'" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

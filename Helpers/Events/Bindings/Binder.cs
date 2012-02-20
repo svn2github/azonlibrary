@@ -1,8 +1,7 @@
 using System;
-using System.ComponentModel;
 
-using Azon.Helpers.Extensions;
 using Azon.Helpers.Reflection;
+using Azon.Helpers.Utils;
 
 namespace Azon.Helpers.Events.Bindings {
     internal class Binder {
@@ -12,59 +11,26 @@ namespace Azon.Helpers.Events.Bindings {
                 Action<TTarget> targetSetter = value => Property.Set(info.Target, value);
 
                 var dependencies = new DependencyCollector(info.Source).Dependencies;
-                new DependencyWatcher(dependencies).BeginWatch();
+                var watcher = new DependencyWatcher(dependencies);
+
+                watcher.ValueChanged += (sender, e) => {
+                    Guard.Block(this, () => targetSetter((TTarget)(object)sourceGetter()));
+                };
+                watcher.BeginWatch();
             }
 
             if (info.Mode.HasFlag(BindingMode.OneWayToSource)) {
                 var targetGetter = info.Target.Compile();
                 Action<TSource> sourceSetter = value => Property.Set(info.Source, value);
 
-                var dependencies = new DependencyCollector(info.Source).Dependencies;
+                var dependencies = new DependencyCollector(info.Target).Dependencies;
+                var watcher = new DependencyWatcher(dependencies);
+
+                watcher.ValueChanged += (sender, e) => {
+                    Guard.Block(this, () => sourceSetter((TSource)(object)targetGetter()));
+                };
+                watcher.BeginWatch();
             }
-        }
-    }
-
-    internal class DependencyWatcher {
-        public event EventHandler ValueChanged = delegate { };
-
-        private readonly Dependency[] _dependencies;
-
-        public DependencyWatcher(Dependency[] dependencies) {
-            _dependencies = dependencies;
-            throw new NotImplementedException();
-        }
-
-        public void BeginWatch() {
-            _dependencies.ForEach(this.BeginObserveDependency);
-        }
-
-        private void BeginObserveDependency(Dependency dependency) {
-            dependency.Target.PropertyChanged += this.OnDependencyValueChanged(dependency);
-            dependency.SubDependencies.ForEach(this.BeginObserveDependency);
-        }
-
-        public void EndWatch() {
-            _dependencies.ForEach(this.EndObserveDependency);
-        }
-
-        private void EndObserveDependency(Dependency dependency) {
-            dependency.Target.PropertyChanged -= this.OnDependencyValueChanged(dependency);
-            dependency.SubDependencies.ForEach(this.EndObserveDependency);
-        }
-
-        private PropertyChangedEventHandler OnDependencyValueChanged(Dependency dependency) {
-            return (sender, args) => {
-                if (dependency.PropertyName != args.PropertyName)
-                    return;
-
-                this.UpdateHandlers(dependency);
-                this.ValueChanged(this, EventArgs.Empty);
-            };
-        }
-
-        private void UpdateHandlers(Dependency dependency) {
-            dependency.SubDependencies.ForEach(this.EndObserveDependency);
-            dependency.SubDependencies.ForEach(this.BeginObserveDependency);
         }
     }
 }

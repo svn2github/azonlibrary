@@ -6,23 +6,39 @@ namespace Azon.Helpers.Events.Bindings.Clauses {
         private readonly Expression<Func<TSource>> _source;
 
         public BindingOptionsClause(Expression<Func<TSource>> source) {
-            this._source = source;
+            _source = source;
         }
 
-        public IBindingModeClause Using(IValueConverter converter) {
-            return new UsingConverterClause<TSource>(this._source).Using(converter);
+        public IBindingModeWithTargetClause Using(IValueConverter converter) {
+            return new UsingConverterClause<TSource>(_source).Using(converter);
+        }
+
+        public IBindingTargetClause In(BindingMode mode) {
+            return this.Using(null).In(mode);
         }
 
         public void OneWayFrom<TTarget>(Expression<Func<TTarget>> target) {
-            new BindingModeClause<TSource>(this._source, null).OneWayFrom(target);
+            this.Using(null).OneWayFrom(target);
         }
 
         public void OneWayTo<TTarget>(Expression<Func<TTarget>> target) {
-            new BindingModeClause<TSource>(this._source, null).OneWayTo(target);
+            this.Using(null).OneWayTo(target);
         }
 
         public void To<TTarget>(Expression<Func<TTarget>> target) {
-            new BindingModeClause<TSource>(this._source, null).To(target);
+            this.Using(null).To(target);
+        }
+
+        public IBindingOptionsClause ThrowingOnBindingErrors() {
+            return new OnErrorBehaviourClause<TSource>(_source).ThrowingOnBindingErrors();
+        }
+
+        public IBindingOptionsClause SkippingBindingErrors() {
+            return new OnErrorBehaviourClause<TSource>(_source).SkippingBindingErrors();
+        }
+
+        public IBindingOptionsClause NotifyingOnBindingErrors() {
+            return new OnErrorBehaviourClause<TSource>(_source).NotifyingOnBindingErrors();
         }
     }
 }

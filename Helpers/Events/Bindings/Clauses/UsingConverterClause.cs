@@ -9,8 +9,8 @@ namespace Azon.Helpers.Events.Bindings.Clauses {
             this._source = source;
         }
 
-        public IBindingModeClause Using(IValueConverter converter) {
-            return new BindingModeClause<TSource>(this._source, converter);
+        public IBindingModeWithTargetClause Using(IValueConverter converter) {
+            return new BindingModeWithTargetClause<TSource>(this._source, converter);
         }
     }
 }

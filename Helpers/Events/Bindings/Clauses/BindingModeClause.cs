@@ -9,42 +9,13 @@ namespace Azon.Helpers.Events.Bindings.Clauses {
         public BindingModeClause(
             Expression<Func<TSource>> source,
             IValueConverter converter
-            ) {
+        ) {
             this._source = source;
             this._converter = converter;
         }
 
-        public void OneWayFrom<TTarget>(Expression<Func<TTarget>> target) {
-            var info = new BindingInfo<TSource, TTarget> {
-                Source = this._source,
-                Target = target,
-                Mode = BindingMode.OneWayToSource,
-                Converter = this._converter
-            };
-
-            new Binder().Apply(info);
-        }
-
-        public void OneWayTo<TTarget>(Expression<Func<TTarget>> target) {
-            var info = new BindingInfo<TSource, TTarget> {
-                Source = this._source,
-                Target = target,
-                Mode = BindingMode.OneWay,
-                Converter = this._converter
-            };
-
-            new Binder().Apply(info);
-        }
-
-        public void To<TTarget>(Expression<Func<TTarget>> target) {
-            var info = new BindingInfo<TSource, TTarget> {
-                Source = this._source,
-                Target = target,
-                Mode = BindingMode.TwoWay,
-                Converter = this._converter
-            };
-
-            new Binder().Apply(info);
+        public IBindingTargetClause In(BindingMode mode) {
+            return new BindingTargetClause<TSource>(_source, _converter, mode);
         }
     }
 }

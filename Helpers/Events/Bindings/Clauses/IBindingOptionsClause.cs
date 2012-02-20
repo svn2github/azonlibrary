@@ -1,3 +1,5 @@
 namespace Azon.Helpers.Events.Bindings.Clauses {
-    public interface IBindingOptionsClause : IUsingConverterClause, IBindingModeClause {}
+    public interface IBindingOptionsClause : IBindingModeWithTargetClause,
+                                             IUsingConverterClause, 
+                                             IOnErrorBehaviourClause {}
 }

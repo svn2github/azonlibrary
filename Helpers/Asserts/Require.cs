@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 
-using Azon.Helpers.Constructs;
+using Switch = Azon.Helpers.Constructs.Switch;
 
 namespace Azon.Helpers.Asserts {
     /// <summary>
     /// Contains a set of methods to check that objects qualify certain conditions.
     /// </summary>
+    [DebuggerStepThrough]
     public static class Require {
         /// <summary>
         /// Throws <see cref="ArgumentNullException"/> if tested object is null.

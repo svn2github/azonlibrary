@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>Azon.Helpers</id>
-    <version>1.0.0.8</version>
+    <version>1.0.0.9</version>
     <title>Azon.Helpers</title>
     <authors>Eugene Strizhok</authors>
     <owners>Eugene Strizhok</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A set of fairly small and simple but often required helper classes.</description>
-    <releaseNotes>Created Silverlight 5.0 version of the library.</releaseNotes>
-    <copyright>Copyright 2011</copyright>
+    <releaseNotes>Added Bind helper allowing to bind together a pair properties of two classes implementing INotifyPropertyChanged interface.</releaseNotes>
+    <copyright>Copyright 2012</copyright>
     <tags>Helpers Extensions</tags>
   </metadata>
 </package>

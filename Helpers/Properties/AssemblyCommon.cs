@@ -2,9 +2,9 @@
 
 [assembly: AssemblyProduct("Azon Helpers Library")]
 [assembly: AssemblyCompany("Eugene Strizhok")]
-[assembly: AssemblyCopyright("Copyright © Eugene Strizhok 2011")]
+[assembly: AssemblyCopyright("Copyright © Eugene Strizhok 2012")]
 //[assembly: AssemblyTrademark("")]
 //[assembly: AssemblyConfiguration("")]
 
-[assembly: AssemblyVersion("1.0.0.8")]
-[assembly: AssemblyFileVersion("1.0.0.8")]
+[assembly: AssemblyVersion("1.0.0.9")]
+[assembly: AssemblyFileVersion("1.0.0.9")]

@@ -1,44 +1,55 @@
 using System;
 using System.Linq.Expressions;
 
+using Azon.Helpers.Asserts;
+using Azon.Helpers.Events.Bindings.Infos;
+
 namespace Azon.Helpers.Events.Bindings.Clauses {
-    public class BindingOptionsClause<TSource> : IBindingOptionsClause {
-        private readonly Expression<Func<TSource>> _source;
+    internal class BindingOptionsClause<TSource> : IBindingOptionsClause<TSource> {
+        private readonly PartialBindingInfo<TSource> _info;
 
-        public BindingOptionsClause(Expression<Func<TSource>> source) {
-            _source = source;
+        public BindingOptionsClause(PartialBindingInfo<TSource> info) {
+            this._info = info;
         }
 
-        public IBindingModeWithTargetClause Using(IValueConverter converter) {
-            return new UsingConverterClause<TSource>(_source).Using(converter);
+        public IBindingOptionsClause<TSource> ThrowingOnBindingErrors() {
+            this._info.ErrorOptions.Mode = ErrorMode.Throw;
+            return this;
         }
 
-        public IBindingTargetClause In(BindingMode mode) {
-            return this.Using(null).In(mode);
+        public IBindingOptionsClause<TSource> SkippingBindingErrors() {
+            this._info.ErrorOptions.Mode = ErrorMode.Skip;
+            return this;
         }
 
-        public void OneWayFrom<TTarget>(Expression<Func<TTarget>> target) {
-            this.Using(null).OneWayFrom(target);
+        public IBindingOptionsClause<TSource> NotifyingOnBindingErrors(Action<BindingException> callback) {
+            this._info.ErrorOptions.Mode = ErrorMode.Notify;
+            this._info.ErrorOptions.Callback = callback;
+            return this;
         }
 
-        public void OneWayTo<TTarget>(Expression<Func<TTarget>> target) {
-            this.Using(null).OneWayTo(target);
+        public void To(Expression<Func<TSource>> target) {
+            this.In(BindingMode.TwoWay).To(target);
         }
 
-        public void To<TTarget>(Expression<Func<TTarget>> target) {
-            this.Using(null).To(target);
+        public void OneWayFrom(Expression<Func<TSource>> target) {
+            this.In(BindingMode.OneWayToSource).To(target);
         }
 
-        public IBindingOptionsClause ThrowingOnBindingErrors() {
-            return new OnErrorBehaviourClause<TSource>(_source).ThrowingOnBindingErrors();
+        public void OneWayTo(Expression<Func<TSource>> target) {
+            this.In(BindingMode.OneWay).To(target);
         }
 
-        public IBindingOptionsClause SkippingBindingErrors() {
-            return new OnErrorBehaviourClause<TSource>(_source).SkippingBindingErrors();
+        public IBindingTargetClause<TSource> In(BindingMode mode) {
+            return this.Using(new ValueConverter<TSource, TSource>()).In(mode);
         }
 
-        public IBindingOptionsClause NotifyingOnBindingErrors() {
-            return new OnErrorBehaviourClause<TSource>(_source).NotifyingOnBindingErrors();
+        public IBindingModeWithTargetClause<TTarget> Using<TTarget>(IValueConverter<TSource, TTarget> converter) {
+            Require.NotNull(converter, "converter");
+            var info = new BindingInfo<TSource, TTarget>(this._info) {
+                Converter = converter
+            };
+            return new BindingTargetWithModeClause<TSource, TTarget>(info);
         }
     }
 }

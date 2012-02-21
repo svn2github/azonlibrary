@@ -54,5 +54,45 @@ namespace Azon.Helpers.Utils {
                 action();
             }
         }
+
+        #region Optimization shortcuts
+
+        public static void Block<T>(Action<T> action, T arg1) {
+            var methods = _store.GetOrCreateValue(action.Target);
+            var protector = methods.GetOrCreateValue(action.Method);
+
+            using (protector) {
+                if (protector.IsOnLookout)
+                    return;
+
+                action(arg1);
+            }
+        }
+
+        public static void Block<T1, T2>(Action<T1, T2> action, T1 arg1, T2 arg2) {
+            var methods = _store.GetOrCreateValue(action.Target);
+            var protector = methods.GetOrCreateValue(action.Method);
+
+            using (protector) {
+                if (protector.IsOnLookout)
+                    return;
+
+                action(arg1, arg2);
+            }
+        }
+
+        public static void Block<T1, T2, T3>(Action<T1, T2, T3> action, T1 arg1, T2 arg2, T3 arg3) {
+            var methods = _store.GetOrCreateValue(action.Target);
+            var protector = methods.GetOrCreateValue(action.Method);
+
+            using (protector) {
+                if (protector.IsOnLookout)
+                    return;
+
+                action(arg1, arg2, arg3);
+            }
+        }
+
+        #endregion
     }
 }

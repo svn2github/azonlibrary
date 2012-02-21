@@ -22,7 +22,6 @@ namespace Azon.Helpers.Events.Bindings {
             _compiled = this.Compile();
 
             this.PropertyName = propertyName;
-            this.UpdateTarget();
         }
 
         private Func<INotifyPropertyChanged> Compile() {

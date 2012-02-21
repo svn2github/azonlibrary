@@ -1,6 +1,8 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 
+using Azon.Helpers.Asserts;
 using Azon.Helpers.Extensions;
 
 namespace Azon.Helpers.Events.Bindings {
@@ -8,16 +10,33 @@ namespace Azon.Helpers.Events.Bindings {
         public event EventHandler ValueChanged = delegate { };
 
         private readonly Dependency[] _dependencies;
+        private readonly BindingMode _mode;
+        private readonly BindindErrorOptions _errorOptions;
 
-        public DependencyWatcher(Dependency[] dependencies) {
-            this._dependencies = dependencies;
+        public DependencyWatcher(
+            Dependency[] dependencies, 
+            BindingMode mode,
+            BindindErrorOptions errorOptions
+        ) {
+            _dependencies = dependencies;
+            _mode = mode;
+            _errorOptions = errorOptions;
         }
 
         public void BeginWatch() {
-            this._dependencies.ForEach(this.BeginObserveDependency);
+            this.Protect(() => {
+                _dependencies.ForEach(this.BeginObserveDependency);
+
+                if (_mode.HasFlag(BindingMode.OneWay))
+                    this.ValueChanged(this, EventArgs.Empty);
+            });
         }
 
         private void BeginObserveDependency(Dependency dependency) {
+            dependency.UpdateTarget();
+
+            Require.NotNull<BindingException>(dependency.Target, dependency.PropertyName);
+
             dependency.Handler = this.OnDependencyValueChanged(dependency);
             dependency.Target.PropertyChanged += dependency.Handler;
             dependency.SubDependencies.ForEach(this.BeginObserveDependency);
@@ -28,6 +47,9 @@ namespace Azon.Helpers.Events.Bindings {
         }
 
         private void EndObserveDependency(Dependency dependency) {
+            if (dependency.Target == null)
+                return;
+
             dependency.Target.PropertyChanged -= dependency.Handler;
             dependency.SubDependencies.ForEach(this.EndObserveDependency);
         }
@@ -37,20 +59,29 @@ namespace Azon.Helpers.Events.Bindings {
                 if (dependency.PropertyName != args.PropertyName)
                     return;
 
-                this.UpdateHandlers(dependency);
-                this.ValueChanged(this, EventArgs.Empty);
+                this.Protect(() => {
+                    this.UpdateHandlers(dependency);
+                    this.ValueChanged(this, EventArgs.Empty);
+                });
             };
         }
 
         private void UpdateHandlers(Dependency dependency) {
             dependency.SubDependencies.ForEach(this.EndObserveDependency);
-            dependency.SubDependencies.ForEach(this.UpdateTarget);
             dependency.SubDependencies.ForEach(this.BeginObserveDependency);
         }
 
-        private void UpdateTarget(Dependency dependency) {
-            dependency.UpdateTarget();
-            dependency.SubDependencies.ForEach(this.UpdateTarget);
-        } 
+        private void Protect(Action action) {
+            try {
+                action();
+            }
+            catch (BindingException e) {
+                if (_errorOptions.Mode == ErrorMode.Throw)
+                    throw;
+
+                if (_errorOptions.Mode == ErrorMode.Notify)
+                    _errorOptions.Callback(e);
+            }
+        }
     }
 }

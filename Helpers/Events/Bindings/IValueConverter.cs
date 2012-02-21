@@ -1,7 +1,7 @@
 namespace Azon.Helpers.Events.Bindings {
-    public interface IValueConverter {
-        object ConvertTo(object sourceValue);
+    public interface IValueConverter<TSource, TTarget> {
+        TTarget ConvertTo(TSource sourceValue);
 
-        object ConvertFrom(object targetValue);
+        TSource ConvertFrom(TTarget targetValue);
     }
 }

@@ -49,38 +49,28 @@
     <Compile Include="Comparers\DelegateBasedComparer.cs" />
     <Compile Include="Events\Bind.cs" />
     <Compile Include="Events\Bindings\BindingException.cs" />
+    <Compile Include="Events\Bindings\Binder.cs" />
     <Compile Include="Events\Bindings\Clauses\BindingModeWithTargetClause.cs">
       <DependentUpon>IBindingModeWithTargetClause.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\Bindings\Clauses\BindingOptionsClause.cs">
       <DependentUpon>IBindingOptionsClause.cs</DependentUpon>
     </Compile>
-    <Compile Include="Events\Bindings\Binder.cs" />
-    <Compile Include="Events\Bindings\Clauses\BindingTargetClause.cs">
-      <DependentUpon>IBindingTargetClause.cs</DependentUpon>
-    </Compile>
     <Compile Include="Events\Bindings\Clauses\IBindingModeWithTargetClause.cs" />
     <Compile Include="Events\Bindings\Clauses\IBindingTargetClause.cs" />
     <Compile Include="Events\Bindings\Clauses\IOnErrorBehaviourClause.cs" />
-    <Compile Include="Events\Bindings\Clauses\OnErrorBehaviourClause.cs">
-      <DependentUpon>IOnErrorBehaviourClause.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Events\Bindings\Clauses\UsingConverterClause.cs">
-      <DependentUpon>IUsingConverterClause.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Events\Bindings\BindingInfo.cs" />
+    <Compile Include="Events\Bindings\Infos\BindingInfo.cs" />
     <Compile Include="Events\Bindings\BindingMode.cs" />
-    <Compile Include="Events\Bindings\Clauses\BindingModeClause.cs">
-      <DependentUpon>IBindingModeClause.cs</DependentUpon>
-    </Compile>
     <Compile Include="Events\Bindings\Dependency.cs" />
     <Compile Include="Events\Bindings\DependencyCollector.cs" />
     <Compile Include="Events\Bindings\Clauses\IBindingModeClause.cs" />
     <Compile Include="Events\Bindings\Clauses\IUsingConverterClause.cs" />
     <Compile Include="Events\Bindings\DependencyWatcher.cs" />
     <Compile Include="Events\Bindings\ErrorMode.cs" />
+    <Compile Include="Events\Bindings\Infos\PartialBindingInfo.cs" />
     <Compile Include="Events\Bindings\IValueConverter.cs" />
     <Compile Include="Events\Bindings\Clauses\IBindingOptionsClause.cs" />
+    <Compile Include="Events\Bindings\ValueConverter.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />

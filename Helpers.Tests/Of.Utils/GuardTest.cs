@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 
+using Azon.Helpers.Extensions;
 using Azon.Helpers.Utils;
+
+using Gallio.Framework;
 
 using MbUnit.Framework;
 
@@ -63,5 +67,25 @@ namespace Azon.Helpers.Tests.Of.Utils {
             Mock.Get(mock).Verify(d => d.Execute(), Times.Once());
             Mock.Get(mock).Verify(d => d.Run(), Times.Once());
         }
+
+        #region Performance Tests
+
+        [Test]
+        public void ShouldBeOfAcceptablePerformance() {
+            var iteration = 0;
+            var stopwatch = Stopwatch.StartNew();
+
+            while (stopwatch.Elapsed < 100.Milliseconds()) {
+                iteration++;
+                Guard.Block(this, this.Method);
+            }
+
+            Assert.GreaterThanOrEqualTo(iteration, 40000);
+            TestLog.Write("Number of iterations: {0}", iteration);
+        }
+
+        private void Method() {}
+
+        #endregion
     }
 }

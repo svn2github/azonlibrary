@@ -23,7 +23,6 @@ namespace Azon.Helpers.Tests.Of.Events.Of.Bindings {
             var expression = (Expression<Func<string>>)(() => source.Name);
             var root = new DependencyCollector(expression).Dependencies.Single();
 
-            Assert.AreEqual(source, root.Target);
             Assert.AreEqual("Name", root.PropertyName);
             Assert.IsEmpty(root.SubDependencies);
         }
@@ -35,11 +34,9 @@ namespace Azon.Helpers.Tests.Of.Events.Of.Bindings {
             var root = new DependencyCollector(expression).Dependencies.Single();
 
             Assert.AreEqual("Inner", root.PropertyName);
-            Assert.AreEqual(source, root.Target);
 
             var subDependency = root.SubDependencies.Single();
             Assert.AreEqual("Name", subDependency.PropertyName);
-            Assert.AreEqual(null, subDependency.Target);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Azon.Helpers.Events.Subscriptions {
         protected abstract void UnsubscribeCore();
 
         public void Unsubscribe() {
-            Guard.Block(this.UnsubscribeCore);
+            Guard.Block(this, this.UnsubscribeCore);
         }
 
         public void Dispose() {

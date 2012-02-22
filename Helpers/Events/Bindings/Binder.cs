@@ -49,7 +49,6 @@ namespace Azon.Helpers.Events.Bindings {
             Action<TTarget> setter,
             Func<TSource, TTarget> converter
         ) {
-            //return (sender, e) => Guard.Block(this.ApplyValue, getter, setter, converter);
             return (sender, e) => Guard.Block(this, () => this.ApplyValue(getter, setter, converter));
         }
 

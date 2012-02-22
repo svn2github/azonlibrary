@@ -27,6 +27,7 @@ namespace Azon.Helpers.Utils {
         /// </summary>
         /// <remarks>
         /// Does not work with closures. Use method overload with an explicit key.
+        /// Also, this method is 6 times slower than its parametrized analog.
         /// </remarks>
         /// <param name="action">A block of code to guard.</param>
         public static void Block(Action action) {
@@ -44,8 +45,8 @@ namespace Azon.Helpers.Utils {
         }
 
         private static void Block(object objectKey, object methodKey, Action action) {
-            var methods = _store.GetOrCreateValue(objectKey);
-            var protector = methods.GetOrCreateValue(methodKey);
+            var methods = _store.GetValue(objectKey, _ => new ConditionalWeakTable<object, Protector>());
+            var protector = methods.GetValue(methodKey, _ => new Protector());
 
             using (protector) {
                 if (protector.IsOnLookout)
@@ -54,45 +55,5 @@ namespace Azon.Helpers.Utils {
                 action();
             }
         }
-
-        #region Optimization shortcuts
-
-        public static void Block<T>(Action<T> action, T arg1) {
-            var methods = _store.GetOrCreateValue(action.Target);
-            var protector = methods.GetOrCreateValue(action.Method);
-
-            using (protector) {
-                if (protector.IsOnLookout)
-                    return;
-
-                action(arg1);
-            }
-        }
-
-        public static void Block<T1, T2>(Action<T1, T2> action, T1 arg1, T2 arg2) {
-            var methods = _store.GetOrCreateValue(action.Target);
-            var protector = methods.GetOrCreateValue(action.Method);
-
-            using (protector) {
-                if (protector.IsOnLookout)
-                    return;
-
-                action(arg1, arg2);
-            }
-        }
-
-        public static void Block<T1, T2, T3>(Action<T1, T2, T3> action, T1 arg1, T2 arg2, T3 arg3) {
-            var methods = _store.GetOrCreateValue(action.Target);
-            var protector = methods.GetOrCreateValue(action.Method);
-
-            using (protector) {
-                if (protector.IsOnLookout)
-                    return;
-
-                action(arg1, arg2, arg3);
-            }
-        }
-
-        #endregion
     }
 }

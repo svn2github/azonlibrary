@@ -139,7 +139,9 @@
     <Compile Include="Generators\ValueGenerators\PrimitiveValueGenerator.cs" />
     <Compile Include="Generators\ValueGenerators\ValueGenerator.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="($(BuildFramework) == '') Or ($(BuildFramework) == 'NET40')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" Condition="$(BuildFramework) == 'SL5'" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

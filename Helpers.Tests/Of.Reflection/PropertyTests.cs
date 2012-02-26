@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 using Azon.Helpers.Reflection;
@@ -16,6 +17,7 @@ namespace Azon.Helpers.Tests.Of.Reflection {
 
         private class Boo {
             public string Name { get; set; }
+            public bool Trigger { get; set; }
         }
 
         [Test]
@@ -35,6 +37,14 @@ namespace Azon.Helpers.Tests.Of.Reflection {
             Property.Set(() => foo.Boo.Name, "changed");
 
             Assert.AreSame("changed", foo.Boo.Name);
+        }
+
+        [Test]
+        public void HierarchyShouldNotFailWhenEncounterUnaryExpression() {
+            Expression<Func<Boo, object>> reference = b => b.Trigger;
+            var result = Property.Hierarchy(reference);
+
+            Assert.AreEqual("Trigger", result.Name);
         }
     }
 }

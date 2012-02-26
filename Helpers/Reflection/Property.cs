@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 using Azon.Helpers.Asserts;
+using Azon.Helpers.Constructs;
 
 namespace Azon.Helpers.Reflection {
     public static class Property {
@@ -15,7 +16,12 @@ namespace Azon.Helpers.Reflection {
 
         public static HierarchicalPropertyInfo Hierarchy<T>(Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
-            return Hierarchy((MemberExpression)reference.Body);
+            return Switch.Type<Expression, HierarchicalPropertyInfo>(reference.Body)
+                .When<UnaryExpression>(u => Hierarchy((MemberExpression)u.Operand))
+                .When<MemberExpression>(Hierarchy)
+                .OtherwiseThrow<NotSupportedException>(
+                    "Expression of type {0} is not supported.",
+                    reference.Body);
         }
 
         public static HierarchicalPropertyInfo Hierarchy<T>(Expression<Func<T>> reference) {
@@ -77,6 +83,25 @@ namespace Azon.Helpers.Reflection {
         public static Type Type<T>(Expression<Func<T>> reference) {
             Require.NotNull(reference, "reference");
             return Hierarchy(reference).PropertyType;
+        }
+
+        public static string Name<T, TResult>(Expression<Func<T, TResult>> reference) {
+            Require.NotNull(reference, "reference");
+            return Name(Hierarchy(reference));
+        }
+
+        public static string Name<T>(Expression<Func<T, object>> reference) {
+            Require.NotNull(reference, "reference");
+            return Name(Hierarchy(reference));
+        }
+
+        public static string Name<T>(Expression<Func<T>> reference) {
+            Require.NotNull(reference, "reference");
+            return Name(Hierarchy(reference));
+        }
+
+        private static string Name(HierarchicalPropertyInfo propertyInfo) {
+            return string.Join(".", propertyInfo.Hierarchy.Select(p => p.Name));
         }
 
         public static void Set<T>(Expression<Func<T>> reference, T value) {

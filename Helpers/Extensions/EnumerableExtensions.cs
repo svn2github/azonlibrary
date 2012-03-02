@@ -8,40 +8,30 @@ using Azon.Helpers.Asserts;
 using Switch = Azon.Helpers.Constructs.Switch;
 
 namespace Azon.Helpers.Extensions {
+    [DebuggerStepThrough]
     public static class EnumerableExtensions {
-        [DebuggerStepThrough]
         public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) {
             Require.NotNull(source, "source");
             Require.NotNull(source, "predicate");
 
             var index = 0;
-            foreach (var item in source) {
-                if (predicate(item, index))
-                    return true;
+            return source.Any(item => predicate(item, index++));
+        }
 
-                index += 1;
+        public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> source, TSource item) {
+            Require.NotNull(source, "source");
+
+            foreach (var each in source) {
+                yield return each;
             }
-
-            return false;
+            yield return item;
         }
 
-        [DebuggerStepThrough]
-        public static HashSet<TSource> ToSet<TSource>(this IEnumerable<TSource> source) {
+        public static IEnumerable<TSource> Except<TSource>(this IEnumerable<TSource> source, TSource item) {
             Require.NotNull(source, "source");
-            return new HashSet<TSource>(source);
+            return source.Where(eachItem => !Object.Equals(eachItem, item));
         }
 
-        [DebuggerStepThrough]
-        public static HashSet<TSource> ToSet<TSource>(
-            this IEnumerable<TSource> source,
-            IEqualityComparer<TSource> comparer
-        ) {
-            Require.NotNull(source, "source");
-            return new HashSet<TSource>(source, comparer);
-        }
-
-
-        [DebuggerStepThrough]
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action) {
             source.ForEach((item, index) => action(item));
         }
@@ -56,25 +46,6 @@ namespace Azon.Helpers.Extensions {
                 action(item, index);
                 index += 1;
             }
-        }
-
-
-        [DebuggerStepThrough]
-        public static IEnumerable<TSource> Except<TSource>(this IEnumerable<TSource> source, TSource item) {
-            Require.NotNull(source, "source");
-
-            return source.Where(eachItem => !Object.Equals(eachItem, item));
-        }
-
-
-        [DebuggerStepThrough]
-        public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> source, TSource item) {
-            Require.NotNull(source, "source");
-
-            foreach (var each in source) {
-                yield return each;
-            }
-            yield return item;
         }
 
         [DebuggerStepThrough]
@@ -145,6 +116,38 @@ namespace Azon.Helpers.Extensions {
                              list.Sort(comparison);
                              return list;
                          });
+        }
+
+        [DebuggerStepThrough]
+        public static IDictionary<TKey, TValue> ToDictionary<T, TKey, TValue>(
+            this IEnumerable<T> source,
+            Func<T, int, TKey> keySelector,
+            Func<T, int, TValue> valueSelector
+        ) {
+            Require.NotNull(source, "source");
+            Require.NotNull(keySelector, "keySelector");
+            Require.NotNull(valueSelector, "valueSelector");
+
+            var i = 0;
+            return source.ToDictionary(
+                item => keySelector(item, i),
+                item => valueSelector(item, i++)
+            );
+        }
+
+        [DebuggerStepThrough]
+        public static HashSet<TSource> ToSet<TSource>(this IEnumerable<TSource> source) {
+            Require.NotNull(source, "source");
+            return new HashSet<TSource>(source);
+        }
+
+        [DebuggerStepThrough]
+        public static HashSet<TSource> ToSet<TSource>(
+            this IEnumerable<TSource> source,
+            IEqualityComparer<TSource> comparer
+        ) {
+            Require.NotNull(source, "source");
+            return new HashSet<TSource>(source, comparer);
         }
     }
 }

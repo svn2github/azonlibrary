@@ -38,6 +38,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Azon.Library.cs">
+      <Link>Properties\Azon.Library.cs</Link>
+    </Compile>
     <Compile Include="Comparers\DelegateBasedComparer.cs" />
     <Compile Include="Events\Bind.cs" />
     <Compile Include="Events\Bindings\BindingException.cs" />
@@ -108,7 +118,6 @@
     <Compile Include="Reflection\HierarchicalPropertyInfo.cs" />
     <Compile Include="Utils\Weak.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\AssemblyCommon.cs" />
     <Compile Include="Reflection\Property.cs" />
     <Compile Include="Asserts\Require.cs" />
     <Compile Include="Events\Subscribe.cs" />
@@ -141,6 +150,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Azon.Library.snk">
+      <Link>Properties\Azon.Library.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="($(BuildFramework) == '') Or ($(BuildFramework) == 'NET40')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" Condition="$(BuildFramework) == 'SL5'" />

@@ -9,11 +9,11 @@ namespace Azon.Helpers.Events.Bindings.Clauses {
         private readonly BindingInfo<TSource, TTarget> _info;
 
         public BindingTargetWithModeClause(BindingInfo<TSource, TTarget> info) {
-            this._info = info;
+            _info = info;
         }
 
         public IBindingTargetClause<TTarget> In(BindingMode mode) {
-            this._info.Mode = mode;
+            _info.Mode = mode;
             return this;
         }
         
@@ -22,12 +22,12 @@ namespace Azon.Helpers.Events.Bindings.Clauses {
         }
 
         public void OneWayTo(Expression<Func<TTarget>> target) {
-            this.In(BindingMode.TwoWay).To(target);
+            this.In(BindingMode.OneWay).To(target);
         }
 
         public void To(Expression<Func<TTarget>> target) {
             Require.NotNull(target, "target");
-            this._info.Target = target;
+            _info.Target = target;
             new Binder().Apply(this._info);
         }
     }

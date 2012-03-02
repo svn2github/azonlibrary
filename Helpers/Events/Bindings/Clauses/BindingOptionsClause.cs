@@ -9,22 +9,22 @@ namespace Azon.Helpers.Events.Bindings.Clauses {
         private readonly PartialBindingInfo<TSource> _info;
 
         public BindingOptionsClause(PartialBindingInfo<TSource> info) {
-            this._info = info;
+            _info = info;
         }
 
         public IBindingOptionsClause<TSource> ThrowingOnBindingErrors() {
-            this._info.ErrorOptions.Mode = ErrorMode.Throw;
+            _info.ErrorOptions.Mode = ErrorMode.Throw;
             return this;
         }
 
         public IBindingOptionsClause<TSource> SkippingBindingErrors() {
-            this._info.ErrorOptions.Mode = ErrorMode.Skip;
+            _info.ErrorOptions.Mode = ErrorMode.Skip;
             return this;
         }
 
         public IBindingOptionsClause<TSource> NotifyingOnBindingErrors(Action<BindingException> callback) {
-            this._info.ErrorOptions.Mode = ErrorMode.Notify;
-            this._info.ErrorOptions.Callback = callback;
+            _info.ErrorOptions.Mode = ErrorMode.Notify;
+            _info.ErrorOptions.Callback = callback;
             return this;
         }
 
@@ -46,7 +46,7 @@ namespace Azon.Helpers.Events.Bindings.Clauses {
 
         public IBindingModeWithTargetClause<TTarget> Using<TTarget>(IValueConverter<TSource, TTarget> converter) {
             Require.NotNull(converter, "converter");
-            var info = new BindingInfo<TSource, TTarget>(this._info) {
+            var info = new BindingInfo<TSource, TTarget>(_info) {
                 Converter = converter
             };
             return new BindingTargetWithModeClause<TSource, TTarget>(info);

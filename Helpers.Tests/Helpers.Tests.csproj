@@ -64,8 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Helpers\Properties\AssemblyCommon.cs">
-      <Link>Properties\AssemblyCommon.cs</Link>
+    <Compile Include="..\Azon.Library.cs">
+      <Link>Properties\Azon.Library.cs</Link>
     </Compile>
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="Of.Constructs\Of.SwitchType\SwitchTypeWithResultTests.cs" />

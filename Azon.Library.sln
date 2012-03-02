@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{661CCCA3-7CFA-4D2F-8D08-D6FF4C49E85E}"
 	ProjectSection(SolutionItems) = preProject
 		Azon.Library.build = Azon.Library.build
+		Azon.Library.cs = Azon.Library.cs
+		Azon.Library.snk = Azon.Library.snk
 		Packages.build = Packages.build
 	EndProjectSection
 EndProject

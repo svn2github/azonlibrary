@@ -42,8 +42,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Azon.Library.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -153,7 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Azon.Library.snk">
-      <Link>Properties\Azon.Library.snk</Link>
+      <Link>Azon.Library.snk</Link>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="($(BuildFramework) == '') Or ($(BuildFramework) == 'NET40')" />

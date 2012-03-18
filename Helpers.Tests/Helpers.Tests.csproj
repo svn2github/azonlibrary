@@ -35,6 +35,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Azon.Library.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gallio" />
     <Reference Include="Gallio40, Version=3.3.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
@@ -92,6 +98,9 @@
     <Compile Include="Internal\Asserts\ExceptionAssert.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Azon.Library.snk">
+      <Link>Azon.Library.snk</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

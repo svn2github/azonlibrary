@@ -32,8 +32,12 @@ namespace Azon.Helpers.Extensions {
             return source.Where(eachItem => !Object.Equals(eachItem, item));
         }
 
-        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action) {
+        public static IEnumerable<TSource> ForEach<TSource>(
+            this IEnumerable<TSource> source, 
+            Action<TSource> action
+        ) {
             source.ForEach((item, index) => action(item));
+            return source;
         }
 
         [DebuggerStepThrough]

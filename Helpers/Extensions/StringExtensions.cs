@@ -102,5 +102,10 @@ namespace Azon.Helpers.Extensions {
 
             return original.Substring(0, original.Length - suffix.Length);
         }
+
+        [Pure]
+        public static string FormatWith(this string formatString, params object[] args) {
+            return string.Format(formatString, args);
+        }
     }
 }

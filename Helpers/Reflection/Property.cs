@@ -6,6 +6,7 @@ using System.Reflection;
 
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Constructs;
+using Azon.Helpers.Extensions;
 
 namespace Azon.Helpers.Reflection {
     public static class Property {
@@ -102,6 +103,72 @@ namespace Azon.Helpers.Reflection {
 
         private static string Name(HierarchicalPropertyInfo propertyInfo) {
             return string.Join(".", propertyInfo.Hierarchy.Select(p => p.Name));
+        }
+
+        public static bool Has(object item, string propertyPath) {
+            Require.NotNull(item, "item");
+            Require.NotEmpty(propertyPath, "propertyPath");
+
+            var parts = propertyPath.Split('.');
+            var nodeType = item.GetType();
+
+            foreach (var part in parts) {
+                var property = nodeType.GetProperty(part);
+                if (property == null)
+                    return false;
+
+                nodeType = property.PropertyType;
+            }
+
+            return true;
+        }
+
+        public static object Get(object item, string propertyPath) {
+            Require.NotNull(item, "item");
+            Require.NotEmpty(propertyPath, "propertyPath");
+
+            var parts = propertyPath.Split('.');
+            var node = item;
+
+            foreach (var part in parts) {
+                Require.NotNull<NullReferenceException>(node,
+                    "Illegal attempt to retrieve value by property path '{0}'" +
+                    " chained to a property set to null.",
+                    propertyPath
+                );
+
+                var property = node.GetType().GetProperty(part);
+
+                Require.NotNull<InvalidOperationException>(property,
+                    "Property {0} does not exist on type {1}",
+                    part, node.GetType()
+                );
+
+                node = property.GetValue(node);
+            }
+
+            return node;
+        }
+
+        public static object GetOrDefault(object item, string propertyPath, object @default = null) {
+            Require.NotNull(item, "item");
+            Require.NotEmpty(propertyPath, "propertyPath");
+
+            var parts = propertyPath.Split('.');
+            var node = item;
+
+            foreach (var part in parts) {
+                if (node == null)
+                    return @default;
+
+                var property = node.GetType().GetProperty(part);
+                if (property == null)
+                    return @default;
+
+                node = property.GetValue(node);
+            }
+
+            return node;
         }
 
         public static void Set<T>(Expression<Func<T>> reference, T value) {

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 using Azon.Helpers.Reflection;
+using Azon.Helpers.Tests.Internal.Asserts;
 
 using MbUnit.Framework;
 
@@ -18,6 +16,78 @@ namespace Azon.Helpers.Tests.Of.Reflection {
         private class Boo {
             public string Name { get; set; }
             public bool Trigger { get; set; }
+        }
+
+        [Test]
+        public void HasShouldReturnTrueIfPropertyExists() {
+            var item = new { Name = "me" };
+
+            Assert.IsTrue(Property.Has(item, "Name"));
+        }
+
+        [Test]
+        public void HasShouldReturnTrueIfPropertyExistsForPath() {
+            var item = new { Inner = new { Name = "me" } };
+
+            Assert.IsTrue(Property.Has(item, "Inner.Name"));
+        }
+
+        [Test]
+        public void HasShouldReturnFalseIfPropertyDoesNotExist() {
+            Assert.IsFalse(Property.Has(new object(), "Name"));
+        }
+
+        [Test]
+        public void GetShouldReturnValueForSimpleProperty() {
+            var foo = new Foo { Boo = new Boo() };
+
+            Assert.AreSame(
+                foo.Boo, 
+                Property.Get(foo, "Boo")
+            );
+        }
+
+        [Test]
+        public void GetShouldReturnValueForExistingPath() {
+            var foo = new Foo {
+                Boo = new Boo { Name = "me" }
+            };
+
+            Assert.AreEqual("me", Property.Get(foo, "Boo.Name"));
+        }
+
+        [Test]
+        public void GetShouldThrowInvalidOperationIfPathDoesNotExist() {
+            ExceptionAssert.Throws<InvalidOperationException>(
+                () => Property.Get(new object(), "Name")
+            );
+        }
+
+        [Test]
+        public void GetShouldThrowNullReferenceIfPathIsChainedToNull() {
+            ExceptionAssert.Throws<NullReferenceException>(
+                () => Property.Get(new Foo(), "Boo.Name")
+            );
+        }
+
+        [Test]
+        public void GetOrDefaultShouldReturnDefaultIfPathDoesNotExist() {
+            var @default = new object();
+
+            Assert.AreSame(
+                @default,
+                Property.GetOrDefault(new object(), "Name", @default)
+            );
+        }
+
+        [Test]
+        public void GetOrDefaultShouldReturnDefaultIfPathIsChainedToNull() {
+            var @default = new object();
+
+            Assert.AreSame(
+                @default,
+                Property.GetOrDefault(new Foo(), "Boo.Name", @default)
+            );
         }
 
         [Test]

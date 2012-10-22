@@ -6,5 +6,5 @@
 //[assembly: AssemblyTrademark("")]
 //[assembly: AssemblyConfiguration("")]
 
-[assembly: AssemblyVersion("1.0.0.17")]
-[assembly: AssemblyFileVersion("1.0.0.17")]
+[assembly: AssemblyVersion("1.0.0.20")]
+[assembly: AssemblyFileVersion("1.0.0.20")]

@@ -127,7 +127,7 @@ namespace Azon.Helpers.Asserts {
 
         private static ArgumentException BuildArgumentException(string message, params object[] args) {
             var formattedMessage = string.Format(message, args);
-            var parameterName = args.Length == 0 ? null : (string)args[0];
+            var parameterName = args.Length == 0 ? null : args[0].ToString();
 
             return new ArgumentException(formattedMessage, parameterName);
         }

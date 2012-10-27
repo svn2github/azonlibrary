@@ -9,6 +9,8 @@ using Azon.Helpers.Extensions;
 
 namespace Azon.Helpers.Reflection {
     public static class Reflect {
+        #region Name
+
         public static string Name<T, TResult>(Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Reflect.Name(reference.Body);
@@ -20,6 +22,11 @@ namespace Azon.Helpers.Reflection {
         }
 
         public static string Name<TResult>(Expression<Func<TResult>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.Name(reference.Body);
+        }
+
+        public static string Name(Expression<Func<object>> reference) {
             Require.NotNull(reference, "reference");
             return Reflect.Name(reference.Body);
         }
@@ -38,6 +45,10 @@ namespace Azon.Helpers.Reflection {
             return GetMember(expression).Name;
         }
 
+        #endregion
+
+        #region DisplayName
+
         public static string DisplayName<T, TResult>(Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Reflect.DisplayName(reference.Body);
@@ -49,6 +60,11 @@ namespace Azon.Helpers.Reflection {
         }
 
         public static string DisplayName<TResult>(Expression<Func<TResult>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.DisplayName(reference.Body);
+        }
+
+        public static string DisplayName(Expression<Func<object>> reference) {
             Require.NotNull(reference, "reference");
             return Reflect.DisplayName(reference.Body);
         }
@@ -72,6 +88,10 @@ namespace Azon.Helpers.Reflection {
             return displayAttribute.Name ?? member.Name;
         }
 
+        #endregion
+
+        #region ShortName
+
         public static string ShortName<T, TResult>(Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Reflect.ShortName(reference.Body);
@@ -83,6 +103,11 @@ namespace Azon.Helpers.Reflection {
         }
 
         public static string ShortName<TResult>(Expression<Func<TResult>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.ShortName(reference.Body);
+        }
+
+        public static string ShortName<TResult>(Expression<Func<object>> reference) {
             Require.NotNull(reference, "reference");
             return Reflect.ShortName(reference.Body);
         }
@@ -105,6 +130,46 @@ namespace Azon.Helpers.Reflection {
 
             return displayAttribute.ShortName ?? member.Name;
         }
+
+        #endregion
+
+        #region Info
+
+        public static MemberInfo Info<T, TResult>(Expression<Func<T, TResult>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.Info(reference.Body);
+        }
+
+        public static MemberInfo Info<T>(Expression<Func<T, object>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.Info(reference.Body);
+        }
+
+        public static MemberInfo Info<TResult>(Expression<Func<TResult>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.Info(reference.Body);
+        }
+
+        public static MemberInfo Info(Expression<Func<object>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.Info(reference.Body);
+        }
+
+        public static MemberInfo Info<T>(Expression<Action<T>> reference) {
+            Require.NotNull(reference, "reference");
+            return Reflect.Info(reference.Body);
+        }
+
+        public static MemberInfo Info(Expression<Action> expression) {
+            Require.NotNull(expression, "expression");
+            return Reflect.Info(expression.Body);
+        }
+
+        private static MemberInfo Info(Expression expression) {
+            return GetMember(expression);
+        }
+
+        #endregion
 
         private static MemberInfo GetMember(Expression expression) {
             return Switch.Type<Expression, MemberInfo>(expression)

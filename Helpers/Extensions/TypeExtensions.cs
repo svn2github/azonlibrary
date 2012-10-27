@@ -20,6 +20,11 @@ namespace Azon.Helpers.Extensions {
             return type.IsAssignableFrom(typeof(T));
         }
 
+        public static bool IsAssignableTo<T>(this Type type) {
+            Require.NotNull(type, "type");
+            return typeof(T).IsAssignableFrom(type);
+        }
+
         public static IEnumerable<Type> GetHierarchy(this Type type, bool includeSelf = true) {
             Require.NotNull(type, "type");
 

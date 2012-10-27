@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Tests.Internal.Asserts;
@@ -178,6 +179,18 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         public void ThatShouldNotRaiseExceptionIfStringIsNotNullOrEmptyIfConditionIsFalse() {
             ExceptionAssert.DoesNotThrow(
                 () => Require.That(true, string.Empty)
+            );
+        }
+
+        [Test]
+        public void ShouldNotThrowInvalidCastException() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.That<ArgumentException>(
+                    0 != 0,
+                    "Actual count ({0}) does not equal expected count ({1})",
+                    0,
+                    0
+                )
             );
         }
 

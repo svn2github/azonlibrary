@@ -80,6 +80,10 @@
     <Compile Include="Of.Events\BindTests.cs" />
     <Compile Include="Of.Events\Of.Bindings\DependencyCollectorTests.cs" />
     <Compile Include="Of.Events\SubscribeTests.cs" />
+    <Compile Include="Of.Extensions\IsGenericDefinedAsTests.cs">
+      <DependentUpon>TypeExtensionsTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Of.Extensions\StringExtensionsTests.cs" />
     <Compile Include="Of.Extensions\TypeExtensionsTests.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\CollectionValueGeneratorTests.cs" />
     <Compile Include="Of.Generators\Of.ValueGenerators\FractionalValueGeneratorTests.cs" />

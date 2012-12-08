@@ -11,6 +11,14 @@ namespace Azon.Helpers.Constructs.SwitchType {
         ISwitchType When<TTry>(Action action);
 
         /// <summary>
+        /// Executes a given action if a type of the tested value matches to the given type.
+        /// </summary>
+        /// <param name="type">A type to test the value against.</param>
+        /// /// <param name="action">An action to execute.</param>
+        /// <returns>The current <see cref="ISwitchType" /> instance.</returns>
+        ISwitchType When(Type type, Action action);
+
+        /// <summary>
         /// Executes a given action if a type of the tested value is constructed from the given generic type.
         /// </summary>
         /// <param name="type">An open generic type to test the value against.</param>
@@ -48,6 +56,14 @@ namespace Azon.Helpers.Constructs.SwitchType {
         /// <param name="action">An action to execute.</param>
         /// <returns>The current <see cref="ISwitchType{T}" /> instance.</returns>
         new ISwitchType<T> When<TTry>(Action action);
+
+        /// <summary>
+        /// Executes a given action if a type of the tested value matches to the given type.
+        /// </summary>
+        /// <param name="type">A type to test the value against.</param>
+        /// <param name="action">An action to execute.</param>
+        /// <returns>The current <see cref="ISwitchType{T}" /> instance.</returns>
+        new ISwitchType<T> When(Type type, Action action);
 
         /// <summary>
         /// Executes a given action if a type of the tested value matches to the given type.

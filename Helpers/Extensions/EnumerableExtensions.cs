@@ -10,6 +10,11 @@ using Switch = Azon.Helpers.Constructs.Switch;
 namespace Azon.Helpers.Extensions {
     [DebuggerStepThrough]
     public static class EnumerableExtensions {
+        public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) {
+            return source == null
+                || !source.Any();
+        }
+
         public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) {
             Require.NotNull(source, "source");
             Require.NotNull(source, "predicate");
@@ -40,7 +45,6 @@ namespace Azon.Helpers.Extensions {
             return source;
         }
 
-        [DebuggerStepThrough]
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action) {
             Require.NotNull(source, "source");
             Require.NotNull(action, "action");
@@ -52,7 +56,6 @@ namespace Azon.Helpers.Extensions {
             }
         }
 
-        [DebuggerStepThrough]
         public static IEnumerable<TSource> HavingMax<TSource, TValue>(
             this IEnumerable<TSource> source,
             Func<TSource, TValue> selector
@@ -60,7 +63,6 @@ namespace Azon.Helpers.Extensions {
             return source.HavingMaxOrMin(selector, 1);
         }
 
-        [DebuggerStepThrough]
         public static IEnumerable<TSource> HavingMin<TSource, TValue>(
             this IEnumerable<TSource> source,
             Func<TSource, TValue> selector
@@ -68,7 +70,6 @@ namespace Azon.Helpers.Extensions {
             return source.HavingMaxOrMin(selector, -1);
         }
 
-        [DebuggerStepThrough]
         private static IEnumerable<TSource> HavingMaxOrMin<TSource, TValue>(
             this IEnumerable<TSource> source,
             Func<TSource, TValue> selector,
@@ -122,7 +123,6 @@ namespace Azon.Helpers.Extensions {
                          });
         }
 
-        [DebuggerStepThrough]
         public static IDictionary<TKey, TValue> ToDictionary<T, TKey, TValue>(
             this IEnumerable<T> source,
             Func<T, int, TKey> keySelector,
@@ -139,13 +139,11 @@ namespace Azon.Helpers.Extensions {
             );
         }
 
-        [DebuggerStepThrough]
         public static HashSet<TSource> ToSet<TSource>(this IEnumerable<TSource> source) {
             Require.NotNull(source, "source");
             return new HashSet<TSource>(source);
         }
 
-        [DebuggerStepThrough]
         public static HashSet<TSource> ToSet<TSource>(
             this IEnumerable<TSource> source,
             IEqualityComparer<TSource> comparer

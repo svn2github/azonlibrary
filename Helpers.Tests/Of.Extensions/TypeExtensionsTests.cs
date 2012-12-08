@@ -9,57 +9,11 @@ using Azon.Helpers.Tests.Internal.Asserts;
 
 using MbUnit.Framework;
 
+using Moq;
+
 namespace Azon.Helpers.Tests.Of.Extensions {
     [TestFixture]
     public class TypeExtensionsTests {
-        #region IsGenericDefinedAs
-
-        [Test]
-        public void IsGenericDefinedAsShouldThrowIfTestedTypeIsNull() {
-            ExceptionAssert.Throws<ArgumentNullException>(
-                () => (null as Type).IsGenericDefinedAs(typeof(int)),
-                ex => Assert.AreEqual("type", ex.ParamName)
-            );
-        }
-
-        [Test]
-        public void IsGenericDefinedAsShouldThrowIfGivenIsNull() {
-            ExceptionAssert.Throws<ArgumentNullException>(
-                () => typeof(int).IsGenericDefinedAs(null),
-                ex => Assert.AreEqual("otherType", ex.ParamName)
-            );
-        }
-
-        [Test]
-        public void IsGenericDefinedAsShouldReturnFalseIfTestedTypeIsNotGeneric() {
-            Assert.IsFalse(
-                typeof(int).IsGenericDefinedAs(typeof(IEnumerable<>))
-            );
-        }
-
-        [Test]
-        public void IsGenericDefinedAsShouldReturnFalseIfGivenTypeIsNotGeneric() {
-            Assert.IsFalse(
-                typeof(int?).IsGenericDefinedAs(typeof(int))
-            );
-        }
-
-        [Test]
-        public void IsGenericDefinedAsShouldReturnFalseIfTestedTypeIsNotConstructedFromGiven() {
-            Assert.IsFalse(
-                typeof(int?).IsGenericDefinedAs(typeof(IEnumerable<>))
-            );
-        }
-
-        [Test]
-        public void IsGenericDefinedAsShouldReturnTrueIfTestedTypeIsConstructedFromGiven() {
-            Assert.IsTrue(
-                typeof(int?).IsGenericDefinedAs(typeof(Nullable<>))
-            );
-        }
-
-        #endregion
-
         #region IsAssignableFrom
 
         [Test]
@@ -268,6 +222,55 @@ namespace Azon.Helpers.Tests.Of.Extensions {
             Assert.IsFalse(
                 implementor.Implements(implemented)
             );
+        }
+
+        #endregion
+
+        #region Real
+
+        [Test]
+        public void ShouldReturnGivenTypeIfItIsNotDynamicallyGenerated() {
+            Assert.AreEqual(
+                typeof(LambdaExpression), 
+                typeof(LambdaExpression).Real()
+            );
+        }
+
+        [Test]
+        public void ShouldReturnFirstNotDynamicallyGeneratedBaseOfGivenType() {
+            var value = new Mock<object>().Object;
+
+            Assert.AreEqual(
+                typeof(object),
+                value.GetType().Real()
+            );
+        }
+
+        #endregion
+
+        #region GetGenericArgumentsOf
+
+        public class ConcreteList : List<int> {}
+        public interface IConcreteList : IList<int> {}
+
+        [Test]
+        [Row(typeof(IList<int>), typeof(IList<>))]
+        [Row(typeof(List<int>), typeof(List<>))]
+        public void ShouldReturnGenericArgumentForTypeDirectlyConstructedFromTemplate(Type type, Type template) {
+            Assert.AreEqual(typeof(int), type.GetGenericArgumentsOf(template).Single());
+        }
+
+        [Test]
+        [Row(typeof(ConcreteList), typeof(List<>))]
+        [Row(typeof(IConcreteList), typeof(IList<>))]
+        [Row(typeof(ConcreteList), typeof(IList<>))]
+        public void ShouldReturnGenericArgumentsForTypeIndirectlyConstructedFromTemplate(Type type, Type template) {
+            Assert.AreEqual(typeof(int), type.GetGenericArgumentsOf(template).Single());
+        }
+
+        [Test]
+        public void ShouldReturnEmptyArrayForTypeNotConstructedFromTemplate() {
+            Assert.IsEmpty(typeof(string).GetGenericArgumentsOf(typeof(IList<>)));
         }
 
         #endregion

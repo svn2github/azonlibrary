@@ -24,11 +24,11 @@ namespace Azon.Helpers.Constructs.SwitchType {
                                                                     : this.Value.GetType();
         }
 
-        protected bool Matches<TTry>() {
-            this.Observe(typeof(TTry));
+        protected bool Matches(Type tryType) {
+            this.Observe(tryType);
             
             return !this.Matched
-                && this.TypeMatches<TTry>()
+                && this.TypeMatches(tryType)
                 && (this.Matched = true);
         }
 
@@ -56,9 +56,9 @@ namespace Azon.Helpers.Constructs.SwitchType {
             this._observed.Add(type);
         }
 
-        private bool TypeMatches<TTry>() {
-            return (this._exactType && typeof(TTry) == this.TestedType)
-                || (!this._exactType && typeof(TTry).IsAssignableFrom(this.TestedType));
+        private bool TypeMatches(Type tryType) {
+            return (this._exactType && tryType == this.TestedType)
+                || (!this._exactType && tryType.IsAssignableFrom(this.TestedType));
         }
 
         private bool TypeMatchesGeneric(Type type, out Type[] args) {

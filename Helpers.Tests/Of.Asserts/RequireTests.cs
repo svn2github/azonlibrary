@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Tests.Internal.Asserts;
@@ -109,14 +108,14 @@ namespace Azon.Helpers.Tests.Of.Asserts {
         [Test]
         public void NotEmptyShouldRaiseArgumentNullExceptionByDefaultIfStringIsNull() {
             ExceptionAssert.Throws<ArgumentNullException>(
-                () => Require.NotEmpty(null, string.Empty)
+                () => Require.NotEmpty((string)null, string.Empty)
             );
         }
 
         [Test]
         public void NotEmptyShouldRaiseArgumentNullExceptionWithParameterNameSetIfStringIsNull() {
             ExceptionAssert.Throws<ArgumentNullException>(
-                () => Require.NotEmpty(null, "param"),
+                () => Require.NotEmpty((string)null, "param"),
                 ex => Assert.AreEqual("param", ex.ParamName)
             );
         }
@@ -141,6 +140,90 @@ namespace Azon.Helpers.Tests.Of.Asserts {
             ExceptionAssert.Throws<ArgumentException>(
                 () => Require.NotEmpty(string.Empty, "param"),
                 "String should not be empty.\r\nParameter name: param"
+            );
+        }
+
+        #endregion
+
+        #endregion
+
+        #region NotEmpty Guid
+
+        private IEnumerable<Guid?> InvalidGuidValues() {
+            yield return null;
+            yield return Guid.Empty;
+        }
+
+        [Test]
+        [Factory("InvalidGuidValues", Kind = FactoryKind.Object)]
+        public void NotEmptyShouldRaiseGivenExceptionIfGuidIsNullOrEmpty(Guid? value) {
+            ExceptionAssert.Throws<InvalidOperationException>(
+                () => Require.NotEmpty<InvalidOperationException>(value, string.Empty)
+            );
+        }
+
+        [Test]
+        [Factory("InvalidGuidValues", Kind = FactoryKind.Object)]
+        public void NotEmptyShouldRaiseGivenExceptionWithCertainMessageIsGuidIsNullOrEmpty(Guid? value) {
+            ExceptionAssert.Throws(
+                () => Require.NotEmpty<Exception>(value, "certain message"),
+                "certain message"
+            );
+        }
+
+        [Test]
+        [Factory("InvalidGuidValues", Kind = FactoryKind.Object)]
+        public void NotEmptyShouldFormatMessageUsingGivenParametersIfGuidIsNullOrEmpty(Guid? value) {
+            ExceptionAssert.Throws(
+                () => Require.NotEmpty<Exception>(value, "{0} {1}", 1, "pinguin"),
+                "1 pinguin"
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldNotRaiseExceptionIfGuidIsNotNullOrEmpty() {
+            ExceptionAssert.DoesNotThrow(
+                () => Require.NotEmpty<Exception>("valid string", string.Empty)
+            );
+        }
+
+        #region Default
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentNullExceptionByDefaultIfGuidIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotEmpty((Guid?)null, string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentNullExceptionWithParameterNameSetIfGuidIsNull() {
+            ExceptionAssert.Throws<ArgumentNullException>(
+                () => Require.NotEmpty((Guid?)null, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionByDefaultIfGuidIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(Guid.Empty, string.Empty)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionWithParameterNameSetIfGuidIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(Guid.Empty, "param"),
+                ex => Assert.AreEqual("param", ex.ParamName)
+            );
+        }
+
+        [Test]
+        public void NotEmptyShouldRaiseArgumentExceptionWithCertainMessageIfGuidIsEmpty() {
+            ExceptionAssert.Throws<ArgumentException>(
+                () => Require.NotEmpty(Guid.Empty, "param"),
+                "Guid should not be empty.\r\nParameter name: param"
             );
         }
 

@@ -10,10 +10,18 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return When<TTry>(value => action());
         }
 
+        public ISwitchType<T> When(Type type, Action action) {
+            return When(type, value => action());
+        }
+
         #region ISwitchType
 
         ISwitchType ISwitchType.When<TTry>(Action action) {
             return this.When<TTry>(action);
+        }
+
+        ISwitchType ISwitchType.When(Type type, Action action) {
+            return this.When(type, action);
         }
 
         ISwitchType ISwitchType.WhenOpen(Type type, Action<Type[]> action) {
@@ -23,9 +31,14 @@ namespace Azon.Helpers.Constructs.SwitchType {
         #endregion
 
         public ISwitchType<T> When<TTry>(Action<TTry> action) {
-            if (this.Matches<TTry>())
-                action((TTry)(object)this.Value);
-            
+            this.When(typeof(TTry), x => action((TTry)x));
+            return this;
+        }
+
+        public ISwitchType<T> When(Type tryType, Action<object> action) {
+            if (this.Matches(tryType))
+                action(this.Value);
+
             return this;
         }
 

@@ -37,6 +37,8 @@ namespace Azon.Helpers.Tests.Of.Reflection {
             Assert.IsFalse(Property.Has(new object(), "Name"));
         }
 
+        #region Get
+
         [Test]
         public void GetShouldReturnValueForSimpleProperty() {
             var foo = new Foo { Boo = new Boo() };
@@ -69,6 +71,8 @@ namespace Azon.Helpers.Tests.Of.Reflection {
                 () => Property.Get(new Foo(), "Boo.Name")
             );
         }
+
+        #endregion
 
         [Test]
         public void GetOrDefaultShouldReturnDefaultIfPathDoesNotExist() {

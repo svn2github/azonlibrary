@@ -14,8 +14,16 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return this.When<TTry>(func);
         }
 
+        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.When(Type type, Func<TResult> func) {
+            return this.When(type, func);
+        }
+
         ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.When<TTry>(TResult result) {
             return this.When<TTry>(result);
+        }
+
+        ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.When(Type type, TResult result) {
+            return this.When(type, result);
         }
 
         ISwitchTypeWithResult<TResult> ISwitchTypeWithResult<TResult>.WhenOpen(Type type, Func<Type[], TResult> func) {
@@ -32,13 +40,25 @@ namespace Azon.Helpers.Constructs.SwitchType {
             return this.When<TTry>(value => func());
         }
 
+        public ISwitchTypeWithResult<T, TResult> When(Type type, Func<TResult> func) {
+            return this.When(type, value => func());
+        }
+
         public ISwitchTypeWithResult<T, TResult> When<TTry>(TResult result) {
-            return this.When<TTry>(type => result);
+            return this.When<TTry>(value => result);
+        }
+
+        public ISwitchTypeWithResult<T, TResult> When(Type type, TResult result) {
+            return this.When(type, value => result);
         }
         
         public ISwitchTypeWithResult<T, TResult> When<TTry>(Func<TTry, TResult> func) {
-            if (this.Matches<TTry>())
-                this._result = func((TTry)(object)this.Value);
+            return this.When(typeof(TTry), value => func((TTry)value));
+        }
+
+        public ISwitchTypeWithResult<T, TResult> When(Type type, Func<object, TResult> func) {
+            if (this.Matches(type))
+                this._result = func(this.Value);
 
             return this;
         }

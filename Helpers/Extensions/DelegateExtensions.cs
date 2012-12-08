@@ -5,7 +5,7 @@ using Azon.Helpers.Comparers;
 
 namespace Azon.Helpers.Extensions {
     public static class DelegateExtensions {
-        private static TDelegate As<TDelegate>(this Delegate @delegate) {
+        public static TDelegate As<TDelegate>(this Delegate @delegate) {
             return (TDelegate)(object)Delegate.CreateDelegate(
                 typeof(TDelegate),
                 @delegate.Target, 

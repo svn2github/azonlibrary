@@ -62,6 +62,33 @@ namespace Azon.Helpers.Asserts {
         }
 
         /// <summary>
+        /// /// Throws <see cref="ArgumentNullException" /> if a given guid is null.<para />
+        /// Throws <see cref="ArgumentException" /> if a given guid is Guid.Empty.
+        /// </summary>
+        /// <param name="value">A guid to test.</param>
+        /// <param name="parameterName">A name of parameter for the exception to throw.</param>
+        public static void NotEmpty(Guid? value, string parameterName) {
+            Require.NotNull(value, parameterName);
+            Require.That<ArgumentException>(value != Guid.Empty, "Guid should not be empty.", parameterName);
+        }
+
+        /// <summary>
+        /// Throws an exception of a given type if tested string is null or empty.
+        /// </summary>
+        /// <typeparam name="T">A type of exception to throw.</typeparam>
+        /// <param name="value">A string to test.</param>
+        /// <param name="message">A message for the exception to throw.</param>
+        /// <param name="args">Optional parameters to format a message with.</param>
+        public static void NotEmpty<T>(Guid? value, string message, params object[] args)
+            where T : Exception 
+        {
+            Require.NotNull<T>(value, message, args);
+
+            if (value == Guid.Empty)
+                Require.Exception<T>(message, args);
+        }
+
+        /// <summary>
         /// Throws <see cref="ArgumentNullException" /> if a given enumeration is null.<para />
         /// Throws <see cref="ArgumentException" /> if a given enumeration has no elements.
         /// </summary>

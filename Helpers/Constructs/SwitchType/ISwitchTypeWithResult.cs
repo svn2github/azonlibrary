@@ -11,12 +11,28 @@ namespace Azon.Helpers.Constructs.SwitchType {
         ISwitchTypeWithResult<TResult> When<TTry>(Func<TResult> func);
 
         /// <summary>
+        /// Executes a given function if a type of the tested value matches to the given type.
+        /// </summary>
+        /// <param name="type">A type to test the value against.</param>
+        /// <param name="func">A function to execute.</param>
+        /// <returns>The current <see cref="ISwitchTypeWithResult{TResult}" /> instance.</returns>
+        ISwitchTypeWithResult<TResult> When(Type type, Func<TResult> func);
+
+        /// <summary>
         /// Returns a given result if a type of the tested value matches to the given type.
         /// </summary>
         /// <typeparam name="TTry">A type to test the value against.</typeparam>
         /// <param name="result">A value to return.</param>
         /// <returns>The current <see cref="ISwitchTypeWithResult{TResult}" /> instance.</returns>
         ISwitchTypeWithResult<TResult> When<TTry>(TResult result);
+
+        /// <summary>
+        /// Returns a given result if a type of the tested value matches to the given type.
+        /// </summary>
+        /// <param name="type">A type to test the value against.</param>
+        /// <param name="result">A value to return.</param>
+        /// <returns>The current <see cref="ISwitchTypeWithResult{TResult}" /> instance.</returns>
+        ISwitchTypeWithResult<TResult> When(Type type, TResult result);
 
         /// <summary>
         /// Executes a given function if a type of the tested value is constructed from the given generic type.
@@ -78,10 +94,26 @@ namespace Azon.Helpers.Constructs.SwitchType {
         /// <summary>
         /// Executes a given function if a type of the tested value matches to the given type.
         /// </summary>
+        /// <param name="type">A type to test the value against.</param>
+        /// <param name="func">A function to execute.</param>
+        /// <returns>The current <see cref="ISwitchTypeWithResult{T,TResult}" /> instance.</returns>
+        new ISwitchTypeWithResult<T, TResult> When(Type type, Func<TResult> func);
+
+        /// <summary>
+        /// Executes a given function if a type of the tested value matches to the given type.
+        /// </summary>
         /// <typeparam name="TTry">A type to test the value against.</typeparam>
         /// <param name="func">A function to execute.</param>
         /// <returns>The current <see cref="ISwitchTypeWithResult{T,TResult}" /> instance.</returns>
         ISwitchTypeWithResult<T, TResult> When<TTry>(Func<TTry, TResult> func);
+
+        /// <summary>
+        /// Executes a given function if a type of the tested value matches to the given type.
+        /// </summary>
+        /// <param name="type">A type to test the value against.</param>
+        /// <param name="func">A function to execute.</param>
+        /// <returns>The current <see cref="ISwitchTypeWithResult{T,TResult}" /> instance.</returns>
+        ISwitchTypeWithResult<T, TResult> When(Type type, Func<object, TResult> func);
 
         /// <summary>
         /// Returns a given result if a type of the tested value matches to the given type.
@@ -90,6 +122,14 @@ namespace Azon.Helpers.Constructs.SwitchType {
         /// <param name="result">A value to return.</param>
         /// <returns>The current <see cref="ISwitchTypeWithResult{T,TResult}" /> instance.</returns>
         new ISwitchTypeWithResult<T, TResult> When<TTry>(TResult result);
+
+        /// <summary>
+        /// Returns a given result if a type of the tested value matches to the given type.
+        /// </summary>
+        /// <param name="type">A type to test the value against.</param>
+        /// <param name="result">A value to return.</param>
+        /// <returns>The current <see cref="ISwitchTypeWithResult{T,TResult}" /> instance.</returns>
+        new ISwitchTypeWithResult<T, TResult> When(Type type, TResult result);
 
         /// <summary>
         /// Executes a given function if a type of the tested value is constructed from the given generic type.

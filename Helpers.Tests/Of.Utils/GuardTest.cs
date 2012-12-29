@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using Azon.Helpers.Extensions;
 using Azon.Helpers.Utils;

@@ -117,6 +117,8 @@
     <Compile Include="Reflection\Reflect.cs" />
     <Compile Include="Reflection\NotifiableProperty.cs" />
     <Compile Include="Utils\Disposable.cs" />
+    <Compile Include="Utils\Disposables\ExceptionAwareAnonymousDisposable.cs" />
+    <Compile Include="Utils\Disposables\WrappingAnonymouseDisposable.cs" />
     <Compile Include="Utils\Guard.cs" />
     <Compile Include="Reflection\HierarchicalPropertyInfo.cs" />
     <Compile Include="Utils\Weak.cs" />

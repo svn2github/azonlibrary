@@ -79,7 +79,7 @@ namespace Azon.Helpers.Tests.Of.Extensions {
             Type type,
             Type template
         ) {
-            Assert.IsTrue(
+            Assert.IsFalse(
                 type.IsGenericDefinedAs(template, recursive: false)
             );
         }

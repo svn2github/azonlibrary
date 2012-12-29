@@ -30,7 +30,23 @@ namespace Azon.Helpers.Generators {
                 select new KeyValuePair<Type, IValueGenerator>(type, generator)
             ).ToList();
 
-            _generators.Sort((x, y) => x.Key.IsAssignableFrom(y.Key) ? 0 : 1);
+            _generators.Sort(ByInheritance);
+        }
+
+        private static int ByInheritance(
+            KeyValuePair<Type, IValueGenerator> x,
+            KeyValuePair<Type, IValueGenerator> y
+        ) {
+            if (x.Key == y.Key)
+                return 0;
+
+            if (x.Key.IsAssignableFrom(y.Key))
+                return 1;
+
+            if (y.Key.IsAssignableFrom(x.Key))
+                return -1;
+
+            return 0;
         }
 
         /// <summary>

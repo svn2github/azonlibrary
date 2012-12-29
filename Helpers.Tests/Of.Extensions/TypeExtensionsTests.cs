@@ -89,6 +89,88 @@ namespace Azon.Helpers.Tests.Of.Extensions {
 
         #region GetInterfaces
 
+        private class Test : IList, IList<string>, ICollection<string>, IEnumerable<string> {
+            public IEnumerator<string> GetEnumerator() {
+                throw new NotImplementedException();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() {
+                return GetEnumerator();
+            }
+
+            public void Add(string item) {
+                throw new NotImplementedException();
+            }
+
+            public int Add(object value) {
+                throw new NotImplementedException();
+            }
+
+            public bool Contains(object value) {
+                throw new NotImplementedException();
+            }
+
+            public void Clear() {
+                throw new NotImplementedException();
+            }
+
+            public int IndexOf(object value) {
+                throw new NotImplementedException();
+            }
+
+            public void Insert(int index, object value) {
+                throw new NotImplementedException();
+            }
+
+            public void Remove(object value) {
+                throw new NotImplementedException();
+            }
+
+            public bool Contains(string item) {
+                throw new NotImplementedException();
+            }
+
+            public void CopyTo(string[] array, int arrayIndex) {
+                throw new NotImplementedException();
+            }
+
+            public bool Remove(string item) {
+                throw new NotImplementedException();
+            }
+
+            public void CopyTo(Array array, int index) {
+                throw new NotImplementedException();
+            }
+
+            public int Count { get; private set; }
+            public object SyncRoot { get; private set; }
+            public bool IsSynchronized { get; private set; }
+            public bool IsReadOnly { get; private set; }
+            public bool IsFixedSize { get; private set; }
+
+            public int IndexOf(string item) {
+                throw new NotImplementedException();
+            }
+
+            public void Insert(int index, string item) {
+                throw new NotImplementedException();
+            }
+
+            public void RemoveAt(int index) {
+                throw new NotImplementedException();
+            }
+
+            object IList.this[int index] {
+                get { throw new NotImplementedException(); }
+                set { throw new NotImplementedException(); }
+            }
+
+            public string this[int index] {
+                get { throw new NotImplementedException(); }
+                set { throw new NotImplementedException(); }
+            }
+        }
+
         [Test]
         public void GetInterfacesShouldThrowIfTestedTypeIsNull() {
             ExceptionAssert.Throws<ArgumentNullException>(
@@ -114,8 +196,8 @@ namespace Azon.Helpers.Tests.Of.Extensions {
         }
 
         [Test]
-        public void GetHierarchyShouldReturnAllImplementedInterfacesFromChildToRoot() {
-            var interfaces = typeof(List<string>).GetInterfaces(includeSelf: false);
+        public void GetHierarchyShouldReturnAllImplementedInterfacesInCorrectOrder() {
+            var interfaces = typeof(Test).GetInterfaces(includeSelf: false);
 
             Assert.AreElementsEqual(
                 new[] {

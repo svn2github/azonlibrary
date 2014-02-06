@@ -2,18 +2,21 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
+using Azon.Helpers.Annotations;
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Constructs;
 
 namespace Azon.Helpers.Utils {
     public static class Call {
-        public static void Generic(Expression<Action> expression, params Type[] typeArgs) {
+        public static void Generic([NotNull] Expression<Action> expression, [NotNull] params Type[] typeArgs) {
+            Require.NotNull(expression, "expression");
             Require.NotEmpty(typeArgs, "typeArgs");
 
             Call.Generic(expression.Body as MethodCallExpression, typeArgs);
         }
 
-        public static T Generic<T>(Expression<Func<T>> expression, params Type[] typeArgs) {
+        public static T Generic<T>([NotNull] Expression<Func<T>> expression, [NotNull] params Type[] typeArgs) {
+            Require.NotNull(expression, "expression");
             Require.NotEmpty(typeArgs, "typeArgs");
 
             return (T)Call.Generic(expression.Body as MethodCallExpression, typeArgs);

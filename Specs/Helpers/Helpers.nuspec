@@ -2,13 +2,15 @@
 <package >
   <metadata>
     <id>Azon.Helpers</id>
-    <version>1.0.0.32</version>
+    <version>1.0.0.36</version>
     <title>Azon.Helpers</title>
     <authors>Eugene Strizhok</authors>
     <owners>Eugene Strizhok</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Fixed bug in Any.</description>
-    <releaseNotes>Added ExceptionExtensions.</releaseNotes>
+    <description>A collection of extension methods that may have been included into BCL.</description>
+    <releaseNotes>
+      Add ContractAnnotation for methods of Require.
+    </releaseNotes>
     <copyright>Copyright 2012</copyright>
     <tags>Helpers Extensions</tags>
   </metadata>

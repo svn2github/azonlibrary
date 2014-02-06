@@ -3,6 +3,8 @@ using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 
+using Azon.Helpers.Annotations;
+
 using Switch = Azon.Helpers.Constructs.Switch;
 
 namespace Azon.Helpers.Asserts {
@@ -16,6 +18,7 @@ namespace Azon.Helpers.Asserts {
         /// </summary>
         /// <param name="value">An object to test.</param>
         /// <param name="parameterName">A name of parameter for the exception to throw.</param>
+        [ContractAnnotation("halt <= value: null")]
         public static void NotNull(object value, string parameterName) {
             Require.NotNull<ArgumentNullException>(value, parameterName);
         }
@@ -27,6 +30,7 @@ namespace Azon.Helpers.Asserts {
         /// <param name="value">An object to test.</param>
         /// <param name="message">A message for the exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
+        [ContractAnnotation("halt <= value: null")]
         public static void NotNull<T>(object value, string message, params object[] args) 
             where T : Exception
         {
@@ -40,6 +44,7 @@ namespace Azon.Helpers.Asserts {
         /// </summary>
         /// <param name="value">A string to test.</param>
         /// <param name="parameterName">A name of parameter for the exception to throw.</param>
+        [ContractAnnotation("halt <= value: null")]
         public static void NotEmpty(string value, string parameterName) {
             Require.NotNull(value, parameterName);
             Require.NotEmpty<ArgumentException>(value, "String should not be empty.", parameterName);
@@ -52,6 +57,7 @@ namespace Azon.Helpers.Asserts {
         /// <param name="value">A string to test.</param>
         /// <param name="message">A message for the exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
+        [ContractAnnotation("halt <= value: null")]
         public static void NotEmpty<T>(string value, string message, params object[] args)
             where T : Exception
         {
@@ -67,6 +73,7 @@ namespace Azon.Helpers.Asserts {
         /// </summary>
         /// <param name="value">A guid to test.</param>
         /// <param name="parameterName">A name of parameter for the exception to throw.</param>
+        [ContractAnnotation("halt <= value: null")]
         public static void NotEmpty(Guid? value, string parameterName) {
             Require.NotNull(value, parameterName);
             Require.That<ArgumentException>(value != Guid.Empty, "Guid should not be empty.", parameterName);
@@ -79,6 +86,7 @@ namespace Azon.Helpers.Asserts {
         /// <param name="value">A string to test.</param>
         /// <param name="message">A message for the exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
+        [ContractAnnotation("halt <= value: null")]
         public static void NotEmpty<T>(Guid? value, string message, params object[] args)
             where T : Exception 
         {
@@ -94,6 +102,7 @@ namespace Azon.Helpers.Asserts {
         /// </summary>
         /// <param name="items">An enumeration to test.</param>
         /// <param name="parameterName">A name of parameter for the exception to throw.</param>
+        [ContractAnnotation("halt <= items: null")]
         public static void NotEmpty(IEnumerable items, string parameterName) {
             Require.NotNull(items, parameterName);
             Require.NotEmpty<ArgumentException>(items, "Sequence should contain elements.", parameterName);
@@ -106,6 +115,7 @@ namespace Azon.Helpers.Asserts {
         /// <param name="items">An enumeration to test.</param>
         /// <param name="message">A message for the exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
+        [ContractAnnotation("halt <= items: null")]
         public static void NotEmpty<T>(IEnumerable items, string message, params object[] args) 
             where T : Exception 
         {
@@ -126,6 +136,7 @@ namespace Azon.Helpers.Asserts {
         /// <param name="condition">A condition to test.</param>
         /// <param name="message">A message for exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
+        [ContractAnnotation("halt <= condition: true")]
         public static void That(bool condition, string message, params object[] args) {
             Require.That<ArgumentException>(condition, message, args);
         }
@@ -137,6 +148,7 @@ namespace Azon.Helpers.Asserts {
         /// <param name="condition">A condition to test.</param>
         /// <param name="message">A message for exception to throw.</param>
         /// <param name="args">Optional parameters to format a message with.</param>
+        [ContractAnnotation("halt <= condition: true")]
         public static void That<T>(bool condition, string message, params object[] args)
             where T : Exception
         {
@@ -144,6 +156,7 @@ namespace Azon.Helpers.Asserts {
                 Require.Exception<T>(message, args);
         }
 
+        [ContractAnnotation("=> halt")]
         public static T Exception<T>(string message, params object[] args)
             where T : Exception
         {

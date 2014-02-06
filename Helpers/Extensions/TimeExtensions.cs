@@ -74,10 +74,6 @@ namespace Azon.Helpers.Extensions {
             return TimeSpan.FromMilliseconds(value);
         }
 
-        public static TimeSpan Years(this int value) {
-            return TimeSpan.FromDays(value * 365.2425);
-        }
-
         public static DateTime Ago(this TimeSpan value) {
             return DateTime.Now - value;
         }

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Azon.Helpers.Annotations;
 using Azon.Helpers.Asserts;
 
 namespace Azon.Helpers.Extensions {
     public static class CollectionExtensions {
-        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> values) {
+        public static void AddRange<T>([NotNull] this ICollection<T> collection, [NotNull] IEnumerable<T> values) {
             Require.NotNull(collection, "collection");
             Require.NotNull(values, "values");
 
@@ -25,14 +26,14 @@ namespace Azon.Helpers.Extensions {
             }
         }
 
-        public static void RemoveAll<T>(this ICollection<T> collection, IEnumerable<T> values) {
+        public static void RemoveAll<T>([NotNull] this ICollection<T> collection, [NotNull] IEnumerable<T> values) {
             Require.NotNull(collection, "collection");
             Require.NotNull(values, "values");
 
             values.ForEach(item => collection.Remove(item));
         }
 
-        public static int RemoveWhere<T>(this ICollection<T> collection, Func<T, bool> predicate) {
+        public static int RemoveWhere<T>([NotNull] this ICollection<T> collection, [NotNull, InstantHandle] Func<T, bool> predicate) {
             Require.NotNull(collection, "collection");
             Require.NotNull(predicate, "predicate");
 
@@ -53,7 +54,7 @@ namespace Azon.Helpers.Extensions {
             return values.Count;
         }
 
-        public static int RemoveWhere<T>(this ICollection<T> collection, Func<T, int, bool> predicate) {
+        public static int RemoveWhere<T>([NotNull] this ICollection<T> collection, [NotNull, InstantHandle] Func<T, int, bool> predicate) {
             Require.NotNull(collection, "collection");
             Require.NotNull(predicate, "predicate");
 

@@ -1,46 +1,64 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 using Azon.Helpers.Asserts;
+using Azon.Helpers.Extensions;
 
 namespace Azon.Helpers.Utils {
     /// <summary>
     /// Provides methods to work with templates.
     /// </summary>
     public static class Template {
-        private static readonly Regex _regex = new Regex(@"{(\w+)}");
-
         /// <summary>
         /// Replaces text occurences enclosed in braces with the string representation
         /// of a corresponding property value of a specified object.
         /// </summary>
         /// <param name="template">A composite string format.</param>
         /// <param name="params">An object that contains zero or more properties to format.</param>
+        /// <param name="replaceRegex">A regex to match parameters that need replacement.</param>
         /// <returns>A copy of string in which the format items have been replaced by
         /// the string representation of a corresponding property value of a specified object.</returns>
         /// <example>Template.Apply("Hello {world}", new { world = "Earth" });</example>
-        public static string Apply(string template, object @params) {
+        public static string Apply(
+            string template,
+            object @params,
+            string replaceRegex = "{(\\w+)}"
+            ) {
             Require.NotNull(template, "template");
             Require.NotNull(@params, "params");
 
-            return _regex.Replace(
-                template,
-                match => {
-                    var parameterName = match.Groups[1].Value;
-                    var property = @params.GetType().GetProperty(parameterName);
+            var paramsDict = @params.GetType()
+                                    .GetProperties()
+                                    .ToDictionary(
+                                        pi => pi.Name,
+                                        pi => pi.GetValue(@params).With(x => x.ToString()));
 
-                    Require.NotNull<InvalidOperationException>(
-                        property,
-                        "A value for parameter {{{0}}} was not supplied.",
-                        parameterName
+            return Apply(template, paramsDict, replaceRegex);
+        }
+
+        public static string Apply(
+            string template,
+            IDictionary<string, string> @params,
+            string replaceRegex = "{(\\w+)}"
+            ) {
+            Require.NotNull(template, "template");
+            Require.NotNull(@params, "params");
+
+            var regex = new Regex(replaceRegex);
+
+            return regex.Replace(template, match => {
+                var paramName = match.Groups[1].Value;
+
+                Require.NotNull<InvalidOperationException>(
+                    @params.ContainsKey(paramName),
+                    "A value for parameter {{{0}}} was not supplied.",
+                    paramName
                     );
 
-                    var parameterValue = property.GetValue(@params, null);
-                    return parameterValue == null
-                               ? string.Empty
-                               : parameterValue.ToString();
-                }
-            );
+                return @params[paramName] ?? string.Empty;
+            });
         }
     }
 }

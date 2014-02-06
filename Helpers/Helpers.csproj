@@ -97,6 +97,7 @@
     <Compile Include="Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeExtensions.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utils\Disposables\AnonymousDisposable.cs" />
     <Compile Include="Utils\Call.cs" />
     <Compile Include="Constructs\SwitchType\ISwitchType.cs" />

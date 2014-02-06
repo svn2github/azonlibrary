@@ -2,18 +2,21 @@
 using System.Linq;
 using System.Reflection;
 
+using Azon.Helpers.Annotations;
 using Azon.Helpers.Asserts;
 
 namespace Azon.Helpers.Extensions {
     public static class CustomAttributeProviderExtensions {
-        public static T GetAttribute<T>(this ICustomAttributeProvider provider, bool inherit = true)
+        [CanBeNull]
+        public static T GetAttribute<T>([NotNull] this ICustomAttributeProvider provider, bool inherit = true)
             where T : Attribute
         {
             Require.NotNull(provider, "provider");
             return (T)provider.GetCustomAttributes(typeof(T), inherit).SingleOrDefault();
         }
 
-        public static T[] GetAttributes<T>(this ICustomAttributeProvider provider, bool inherit = true)
+        [NotNull]
+        public static T[] GetAttributes<T>([NotNull] this ICustomAttributeProvider provider, bool inherit = true)
             where T : Attribute 
         {
             Require.NotNull(provider, "provider");
@@ -21,13 +24,13 @@ namespace Azon.Helpers.Extensions {
             return attrs.Cast<T>().ToArray();
         }
 
-        public static bool HasAttribute<T>(this ICustomAttributeProvider provider, bool inherit = true) 
+        public static bool HasAttribute<T>([NotNull] this ICustomAttributeProvider provider, bool inherit = true) 
             where T : Attribute
         {
             return HasAttribute(provider, typeof(T), inherit);
         }
 
-        public static bool HasAttribute(this ICustomAttributeProvider provider, Type attributeType, bool inherit = true) {
+        public static bool HasAttribute([NotNull] this ICustomAttributeProvider provider, [NotNull] Type attributeType, bool inherit = true) {
             Require.NotNull(provider, "provider");
             Require.NotNull(attributeType, "attributeType");
             Require.That(

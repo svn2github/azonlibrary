@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
+using Azon.Helpers.Annotations;
 using Azon.Helpers.Asserts;
 using Azon.Helpers.Constructs;
 using Azon.Helpers.Extensions;
@@ -12,12 +13,14 @@ namespace Azon.Helpers.Reflection {
     public static class Property {
         #region Hierarchy
 
-        public static HierarchicalPropertyInfo Hierarchy<T, TResult>(Expression<Func<T, TResult>> reference) {
+        [NotNull]
+        public static HierarchicalPropertyInfo Hierarchy<T, TResult>([NotNull] Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Hierarchy((MemberExpression)reference.Body);
         }
 
-        public static HierarchicalPropertyInfo Hierarchy<T>(Expression<Func<T, object>> reference) {
+        [NotNull]
+        public static HierarchicalPropertyInfo Hierarchy<T>([NotNull] Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
             return Switch.Type<Expression, HierarchicalPropertyInfo>(reference.Body)
                 .When<UnaryExpression>(u => Hierarchy((MemberExpression)u.Operand))
@@ -27,12 +30,14 @@ namespace Azon.Helpers.Reflection {
                     reference.Body);
         }
 
-        public static HierarchicalPropertyInfo Hierarchy<T>(Expression<Func<T>> reference) {
+        [NotNull]
+        public static HierarchicalPropertyInfo Hierarchy<T>([NotNull] Expression<Func<T>> reference) {
             Require.NotNull(reference, "reference");
             return Hierarchy((MemberExpression)reference.Body);
         }
 
-        public static HierarchicalPropertyInfo Hierarchy(MemberExpression member) {
+        [NotNull]
+        public static HierarchicalPropertyInfo Hierarchy([NotNull] MemberExpression member) {
             Require.NotNull(member, "member");
 
             var properties = new Stack<PropertyInfo>();
@@ -57,27 +62,32 @@ namespace Azon.Helpers.Reflection {
 
         #region Path
 
-        public static string Path<T, TResult>(Expression<Func<T, TResult>> reference) {
-            Require.NotNull(reference, "reference");
-            return Path(Hierarchy(reference));
-        }
-        
-        public static string Path<T>(Expression<Func<T, object>> reference) {
+        [NotNull]
+        public static string Path<T, TResult>([NotNull] Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Path(Hierarchy(reference));
         }
 
-        public static string Path<T>(Expression<Func<T>> reference) {
+        [NotNull]
+        public static string Path<T>([NotNull] Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
             return Path(Hierarchy(reference));
         }
 
-        public static string Path(Expression<Func<object>> reference) {
+        [NotNull]
+        public static string Path<T>([NotNull] Expression<Func<T>> reference) {
             Require.NotNull(reference, "reference");
             return Path(Hierarchy(reference));
         }
 
-        public static string Path(HierarchicalPropertyInfo propertyInfo) {
+        [NotNull]
+        public static string Path([NotNull] Expression<Func<object>> reference) {
+            Require.NotNull(reference, "reference");
+            return Path(Hierarchy(reference));
+        }
+
+        [NotNull]
+        public static string Path([NotNull] HierarchicalPropertyInfo propertyInfo) {
             Require.NotNull(propertyInfo, "propertyInfo");
             return string.Join(".", propertyInfo.Hierarchy.Select(p => p.Name));
         }
@@ -86,22 +96,26 @@ namespace Azon.Helpers.Reflection {
 
         #region Type
 
-        public static Type Type<T, TResult>(Expression<Func<T, TResult>> reference) {
+        [NotNull]
+        public static Type Type<T, TResult>([NotNull] Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Hierarchy(reference).PropertyType;
         }
 
-        public static Type Type<T>(Expression<Func<T, object>> reference) {
+        [NotNull]
+        public static Type Type<T>([NotNull] Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
             return Hierarchy(reference).PropertyType;
         }
 
-        public static Type Type<T>(Expression<Func<T>> reference) {
+        [NotNull]
+        public static Type Type<T>([NotNull] Expression<Func<T>> reference) {
             Require.NotNull(reference, "reference");
             return Hierarchy(reference).PropertyType;
         }
 
-        public static Type Type(Expression<Func<object>> reference) {
+        [NotNull]
+        public static Type Type([NotNull] Expression<Func<object>> reference) {
             Require.NotNull(reference, "reference");
             return Hierarchy(reference).PropertyType;
         }
@@ -110,22 +124,26 @@ namespace Azon.Helpers.Reflection {
 
         #region Name
 
-        public static string Name<T, TResult>(Expression<Func<T, TResult>> reference) {
+        [NotNull]
+        public static string Name<T, TResult>([NotNull] Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Name(Hierarchy(reference));
         }
 
-        public static string Name<T>(Expression<Func<T, object>> reference) {
+        [NotNull]
+        public static string Name<T>([NotNull] Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
             return Name(Hierarchy(reference));
         }
 
-        public static string Name<T>(Expression<Func<T>> reference) {
+        [NotNull]
+        public static string Name<T>([NotNull] Expression<Func<T>> reference) {
             Require.NotNull(reference, "reference");
             return Name(Hierarchy(reference));
         }
 
-        public static string Name(Expression<Func<object>> reference) {
+        [NotNull]
+        public static string Name([NotNull] Expression<Func<object>> reference) {
             Require.NotNull(reference, "reference");
             return Name(Hierarchy(reference));
         }
@@ -138,27 +156,31 @@ namespace Azon.Helpers.Reflection {
 
         #region Info
 
-        public static PropertyInfo Info<T, TResult>(Expression<Func<T, TResult>> reference) {
+        [NotNull]
+        public static PropertyInfo Info<T, TResult>([NotNull] Expression<Func<T, TResult>> reference) {
             Require.NotNull(reference, "reference");
             return Info(Hierarchy(reference));
         }
 
-        public static PropertyInfo Info<T>(Expression<Func<T, object>> reference) {
+        [NotNull]
+        public static PropertyInfo Info<T>([NotNull] Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
             return Info(Hierarchy(reference));
         }
 
-        public static PropertyInfo Info<T>(Expression<Func<T>> reference) {
+        [NotNull]
+        public static PropertyInfo Info<T>([NotNull] Expression<Func<T>> reference) {
             Require.NotNull(reference, "reference");
             return Info(Hierarchy(reference));
         }
 
-        public static PropertyInfo Info(Expression<Func<object>> reference) {
+        [NotNull]
+        public static PropertyInfo Info([NotNull] Expression<Func<object>> reference) {
             Require.NotNull(reference, "reference");
             return Info(Hierarchy(reference));
         }
 
-        private static PropertyInfo Info(HierarchicalPropertyInfo propertyInfo) {
+        private static PropertyInfo Info([NotNull] HierarchicalPropertyInfo propertyInfo) {
             return propertyInfo.Hierarchy.LastOrDefault();
         }
 
@@ -166,7 +188,7 @@ namespace Azon.Helpers.Reflection {
 
         #region Get-Set
 
-        public static bool Has(object item, string propertyPath) {
+        public static bool Has([NotNull] object item, [NotNull] string propertyPath) {
             Require.NotNull(item, "item");
             Require.NotEmpty(propertyPath, "propertyPath");
 
@@ -184,7 +206,8 @@ namespace Azon.Helpers.Reflection {
             return true;
         }
 
-        public static object Get(object item, string propertyPath) {
+        [CanBeNull]
+        public static object Get([NotNull] object item, [NotNull] string propertyPath) {
             Require.NotNull(item, "item");
             Require.NotEmpty(propertyPath, "propertyPath");
 
@@ -211,7 +234,8 @@ namespace Azon.Helpers.Reflection {
             return node;
         }
 
-        public static object GetOrDefault(object item, string propertyPath, object @default = null) {
+        [CanBeNull]
+        public static object GetOrDefault([NotNull] object item, [NotNull] string propertyPath, object @default = null) {
             Require.NotNull(item, "item");
             Require.NotEmpty(propertyPath, "propertyPath");
 
@@ -232,7 +256,7 @@ namespace Azon.Helpers.Reflection {
             return node;
         }
 
-        public static void Set<T>(Expression<Func<T>> reference, T value) {
+        public static void Set<T>([NotNull] Expression<Func<T>> reference, T value) {
             Require.NotNull(reference, "reference");
 
             var hierarchy = Hierarchy(reference);

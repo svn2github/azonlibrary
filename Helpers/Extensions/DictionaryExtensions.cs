@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Azon.Helpers.Annotations;
+
 namespace Azon.Helpers.Extensions {
     public static class DictionaryExtensions {
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key) {
+        [CanBeNull]
+        public static TValue GetValueOrDefault<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> dictionary, TKey key) {
             return dictionary.GetValueOrDefault(key, default(TValue));
         }
 
+        [CanBeNull]
         public static TDefault GetValueOrDefault<TKey, TValue, TDefault>(
-            this IDictionary<TKey, TValue> dictionary,
+            [NotNull] this IDictionary<TKey, TValue> dictionary,
             TKey key,
             TDefault @default
         ) 
@@ -18,16 +22,18 @@ namespace Azon.Helpers.Extensions {
             return dictionary.TryGetValue(key, out local) ? local : @default;
         }
 
-        public static TValue GetOrCreate<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+        [NotNull]
+        public static TValue GetOrCreate<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> dictionary, TKey key)
             where TValue : new() 
         {
             return dictionary.GetOrCreate(key, () => new TValue());
         }
 
+        [NotNull]
         public static TValue GetOrCreate<TKey, TValue>(
-            this IDictionary<TKey, TValue> dictionary,
+            [NotNull] this IDictionary<TKey, TValue> dictionary,
             TKey key,
-            Func<TValue> valueFactory
+            [NotNull, InstantHandle] Func<TValue> valueFactory
         ) {
             TValue value;
             if (!dictionary.TryGetValue(key, out value)) {

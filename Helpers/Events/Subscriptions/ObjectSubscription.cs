@@ -24,15 +24,15 @@ namespace Azon.Helpers.Events.Subscriptions {
         private readonly T _entity;
 
         public ObjectSubscription(AggregateSubscription subscription, T entity) {
-            this._subscription = subscription;
-            this._entity = entity;
+            _subscription = subscription;
+            _entity = entity;
         }
 
         public ICallMethodClause<T> HasChanged(Expression<Func<T, object>> reference) {
             Require.NotNull(reference, "reference");
 
             var info = new ChangedSubscriptionInfo(this._entity, Property.Path(reference));
-            this._infos.Add(info);
+            _infos.Add(info);
             return new CallMethodClause<T>(this, info);
         }
 
@@ -40,17 +40,17 @@ namespace Azon.Helpers.Events.Subscriptions {
             Require.NotNull(reference, "reference");
 
             var info = new ChangingSubscriptionInfo(this._entity, Property.Path(reference));
-            this._infos.Add(info);
+            _infos.Add(info);
             return new CallMethodClause<T>(this, info);
         }
 
         public override IObjectSubscription<TEntity> Object<TEntity>(TEntity entity) {
-            return this._subscription.Object(entity);
+            return _subscription.Object(entity);
         }
 
         protected override void UnsubscribeCore() {
-            this._subscribers.Values.ForEach(subscriber => subscriber.Unsubscribe());
-            this._subscription.Unsubscribe();
+            _subscribers.Values.ForEach(subscriber => subscriber.Unsubscribe());
+            _subscription.Unsubscribe();
         }
 
         internal void Subscribe(ISubscriptionInfo info) {
@@ -60,8 +60,8 @@ namespace Azon.Helpers.Events.Subscriptions {
         protected ISubscribeOn GetOrCreateSubscriber(ISubscriptionInfo info) {
             var type = info.GetType();
 
-            return this._subscribers.GetValueOrDefault(type)
-                ?? (this._subscribers[type] = _createSubscriber[type](this._entity));
+            return _subscribers.GetValueOrDefault(type)
+                ?? (_subscribers[type] = _createSubscriber[type](this._entity));
         }
     }
 }

@@ -1,5 +1,8 @@
+using Azon.Helpers.Annotations;
+
 namespace Azon.Helpers.Events.Bindings.Clauses {
     public interface IUsingConverterClause<TSource> {
-        IBindingModeWithTargetClause<TTarget> Using<TTarget>(IValueConverter<TSource, TTarget> converter);
+        [NotNull]
+        IBindingModeWithTargetClause<TTarget> Using<TTarget>([NotNull] IValueConverter<TSource, TTarget> converter);
     }
 }

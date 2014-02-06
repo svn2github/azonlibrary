@@ -38,6 +38,10 @@ namespace Azon.Helpers.Extensions {
             return typeof(T).IsAssignableFrom(type);
         }
 
+        public static object GetDefaultValue(this Type type) {
+            return type.IsValueType ? Activator.CreateInstance(type) : null;
+        }
+
         public static IEnumerable<Type> GetHierarchy(this Type type, bool includeSelf = true) {
             Require.NotNull(type, "type");
 

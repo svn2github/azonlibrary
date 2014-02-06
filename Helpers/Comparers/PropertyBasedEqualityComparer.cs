@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 
+using Azon.Helpers.Annotations;
 using Azon.Helpers.Asserts;
 
 namespace Azon.Helpers.Comparers {
     public class PropertyBasedEqualityComparer<T> : IEqualityComparer<T> {
         private readonly Func<T, object> _selector;
 
-        public PropertyBasedEqualityComparer(Func<T, object> selector) {
+        public PropertyBasedEqualityComparer([NotNull] Func<T, object> selector) {
             Require.NotNull(selector, "selector");
 
             this._selector = selector;

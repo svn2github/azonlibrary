@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
+using Azon.Helpers.Annotations;
 using Azon.Helpers.Asserts;
 
 using Switch = Azon.Helpers.Constructs.Switch;
@@ -10,12 +12,15 @@ using Switch = Azon.Helpers.Constructs.Switch;
 namespace Azon.Helpers.Extensions {
     [DebuggerStepThrough]
     public static class EnumerableExtensions {
-        public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) {
+        public static bool IsNullOrEmpty<TSource>([CanBeNull] this IEnumerable<TSource> source) {
             return source == null
                 || !source.Any();
         }
 
-        public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate) {
+        public static bool Any<TSource>(
+            [NotNull] this IEnumerable<TSource> source,
+            [NotNull, InstantHandle] Func<TSource, int, bool> predicate
+        ) {
             Require.NotNull(source, "source");
             Require.NotNull(source, "predicate");
 
@@ -23,7 +28,8 @@ namespace Azon.Helpers.Extensions {
             return source.Any(item => predicate(item, index++));
         }
 
-        public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> source, TSource item) {
+        [NotNull]
+        public static IEnumerable<TSource> Concat<TSource>([NotNull] this IEnumerable<TSource> source, TSource item) {
             Require.NotNull(source, "source");
 
             foreach (var each in source) {
@@ -32,20 +38,28 @@ namespace Azon.Helpers.Extensions {
             yield return item;
         }
 
-        public static IEnumerable<TSource> Except<TSource>(this IEnumerable<TSource> source, TSource item) {
+        [NotNull]
+        public static IEnumerable<TSource> Except<TSource>([NotNull] this IEnumerable<TSource> source, TSource item) {
             Require.NotNull(source, "source");
             return source.Where(eachItem => !Object.Equals(eachItem, item));
         }
 
+        [NotNull]
         public static IEnumerable<TSource> ForEach<TSource>(
-            this IEnumerable<TSource> source, 
-            Action<TSource> action
+            [NotNull] this IEnumerable<TSource> source,
+            [NotNull, InstantHandle] Action<TSource> action
         ) {
-            source.ForEach((item, index) => action(item));
-            return source;
+            Require.NotNull(source, "source");
+            Require.NotNull(action, "action");
+
+            return source.ForEach((item, index) => action(item));
         }
 
-        public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action) {
+        [NotNull]
+        public static IEnumerable<TSource> ForEach<TSource>(
+            [NotNull] this IEnumerable<TSource> source, 
+            [NotNull, InstantHandle] Action<TSource, int> action
+        ) {
             Require.NotNull(source, "source");
             Require.NotNull(action, "action");
 
@@ -54,25 +68,29 @@ namespace Azon.Helpers.Extensions {
                 action(item, index);
                 index += 1;
             }
+            return source;
         }
 
+        [NotNull]
         public static IEnumerable<TSource> HavingMax<TSource, TValue>(
-            this IEnumerable<TSource> source,
-            Func<TSource, TValue> selector
+            [NotNull] this IEnumerable<TSource> source,
+            [NotNull, InstantHandle] Func<TSource, TValue> selector
         ) {
             return source.HavingMaxOrMin(selector, 1);
         }
 
+        [NotNull]
         public static IEnumerable<TSource> HavingMin<TSource, TValue>(
-            this IEnumerable<TSource> source,
-            Func<TSource, TValue> selector
+            [NotNull] this IEnumerable<TSource> source,
+            [NotNull, InstantHandle] Func<TSource, TValue> selector
         ) {
             return source.HavingMaxOrMin(selector, -1);
         }
 
+        [NotNull]
         private static IEnumerable<TSource> HavingMaxOrMin<TSource, TValue>(
-            this IEnumerable<TSource> source,
-            Func<TSource, TValue> selector,
+            [NotNull] this IEnumerable<TSource> source,
+            [NotNull, InstantHandle] Func<TSource, TValue> selector,
             int comparison
         ) {
             Require.NotNull(source, "source");
@@ -101,7 +119,11 @@ namespace Azon.Helpers.Extensions {
             return selectedItems;
         }
 
-        public static IEnumerable<T> Sort<T>(this IEnumerable<T> items, Func<T, T, bool> predicate) {
+        [NotNull]
+        public static IEnumerable<T> Sort<T>(
+            [NotNull] this IEnumerable<T> items, 
+            [NotNull, InstantHandle] Func<T, T, bool> predicate
+        ) {
             Require.NotNull(items, "items");
             Require.NotNull(predicate, "predicate");
 
@@ -123,10 +145,11 @@ namespace Azon.Helpers.Extensions {
                          });
         }
 
+        [NotNull]
         public static IDictionary<TKey, TValue> ToDictionary<T, TKey, TValue>(
-            this IEnumerable<T> source,
-            Func<T, int, TKey> keySelector,
-            Func<T, int, TValue> valueSelector
+            [NotNull] this IEnumerable<T> source,
+            [NotNull, InstantHandle] Func<T, int, TKey> keySelector,
+            [NotNull, InstantHandle] Func<T, int, TValue> valueSelector
         ) {
             Require.NotNull(source, "source");
             Require.NotNull(keySelector, "keySelector");
@@ -139,17 +162,51 @@ namespace Azon.Helpers.Extensions {
             );
         }
 
-        public static HashSet<TSource> ToSet<TSource>(this IEnumerable<TSource> source) {
+        [NotNull]
+        public static HashSet<TSource> ToSet<TSource>([NotNull] this IEnumerable<TSource> source) {
             Require.NotNull(source, "source");
             return new HashSet<TSource>(source);
         }
 
+        [NotNull]
         public static HashSet<TSource> ToSet<TSource>(
-            this IEnumerable<TSource> source,
-            IEqualityComparer<TSource> comparer
+            [NotNull] this IEnumerable<TSource> source,
+            [CanBeNull] IEqualityComparer<TSource> comparer
         ) {
             Require.NotNull(source, "source");
             return new HashSet<TSource>(source, comparer);
+        }
+
+        [NotNull]
+        public static IEnumerable<T> TakeAllButLast<T>([NotNull] this IEnumerable<T> source) {
+            Require.NotNull(source, "source");
+
+            var it = source.GetEnumerator();
+            var isFirst = true;
+            var item = default(T);
+
+            while (it.MoveNext()) {
+                if (!isFirst) 
+                    yield return item;
+
+                item = it.Current;
+                isFirst = false;
+            }
+        }
+
+        [NotNull]
+        public static IEnumerable<T> TakeAllButLast<T>([NotNull] this IEnumerable<T> source, int count) {
+            Require.NotNull(source, "source");
+
+            var it = source.GetEnumerator();
+            var queue = new Queue<T>();
+
+            while (it.MoveNext()) {
+                queue.Enqueue(it.Current);
+
+                if (queue.Count > count)
+                    yield return queue.Dequeue();
+            }
         }
     }
 }
